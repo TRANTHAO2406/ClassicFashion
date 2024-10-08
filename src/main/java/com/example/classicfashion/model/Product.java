@@ -33,6 +33,9 @@ public class Product {
 	@JoinColumn(name = "userId")
 	private User user;
 
+	@Column(name = "status")
+	private String status;
+
 	@Column(name = "createdDate", nullable = false)
 	private LocalDate createdDate;
 
@@ -50,14 +53,14 @@ public class Product {
 
 	public Product() {
 	}
-
+  
 	public Product(Long id, String productName, Category category, User user, LocalDate createdDate) {
 		this.id = id;
 		this.productName = productName;
 		this.category = category;
 		this.user = user;
+		this.status = status;
 		this.createdDate = createdDate;
-		
 	}
 
 	public Long getId() {
@@ -90,6 +93,14 @@ public class Product {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public LocalDate getCreatedDate() {

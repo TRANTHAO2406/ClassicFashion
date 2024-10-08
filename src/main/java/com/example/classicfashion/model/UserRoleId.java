@@ -34,17 +34,13 @@ public class UserRoleId implements Serializable {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (o == null || getClass() != o.getClass())
-			return false;
-		UserRoleId that = (UserRoleId) o;
-		return Objects.equals(user, that.user) && Objects.equals(role, that.role);
-
+		if (this == o) return true;
+		if (!(o instanceof UserRoleId that)) return false;
+		return Objects.equals(getUser(), that.getUser()) && Objects.equals(getRole(), that.getRole());
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(user, role);
+		return Objects.hash(getUser(), getRole());
 	}
 }

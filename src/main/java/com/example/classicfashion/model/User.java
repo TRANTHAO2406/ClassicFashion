@@ -64,6 +64,9 @@ public class User {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Product> products;
 
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private List<Token> tokens;
+
 	public User(Long id, String email, String password, String userName, String phone, String address, String status,
 			LocalDate createdDate, LocalDate updatedDate) {
 		super();

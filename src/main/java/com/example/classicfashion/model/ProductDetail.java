@@ -1,6 +1,7 @@
 package com.example.classicfashion.model;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,7 +36,7 @@ public class ProductDetail {
 	@JoinColumn(name = "imageId")
 	private Image imageId;
 
-	@Column(nullable = false)
+	@Column(name = "price", nullable = false)
 	private BigDecimal price;
 
 	@Column(nullable = false)
@@ -47,8 +48,7 @@ public class ProductDetail {
 	public ProductDetail() {
 	}
 
-	public ProductDetail(Product productId, Color colorId, Size sizeId, Image imageId, BigDecimal price,
-			Integer quantity, String description) {
+	public ProductDetail(Product productId, Color colorId, Size sizeId, Image imageId, BigDecimal price, Integer quantity, String description) {
 		this.productId = productId;
 		this.colorId = colorId;
 		this.sizeId = sizeId;
@@ -114,4 +114,15 @@ public class ProductDetail {
 		this.description = description;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof ProductDetail that)) return false;
+		return Objects.equals(getProductId(), that.getProductId()) && Objects.equals(getColorId(), that.getColorId()) && Objects.equals(getSizeId(), that.getSizeId()) && Objects.equals(getImageId(), that.getImageId()) && Objects.equals(getPrice(), that.getPrice()) && Objects.equals(getQuantity(), that.getQuantity()) && Objects.equals(getDescription(), that.getDescription());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getProductId(), getColorId(), getSizeId(), getImageId(), getPrice(), getQuantity(), getDescription());
+	}
 }
