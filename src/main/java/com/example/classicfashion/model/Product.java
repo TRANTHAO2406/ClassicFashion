@@ -54,13 +54,14 @@ public class Product {
 	public Product() {
 	}
   
-	public Product(Long id, String productName, Category category, User user, LocalDate createdDate) {
+	public Product(Long id, String productName, Category category, User user, String status, LocalDate createdDate, LocalDate updateDate) {
 		this.id = id;
 		this.productName = productName;
 		this.category = category;
 		this.user = user;
 		this.status = status;
 		this.createdDate = createdDate;
+		this.updatedDate = updatedDate;
 	}
 
 	public Long getId() {
