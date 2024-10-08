@@ -3,6 +3,7 @@ package com.example.classicfashion.model;
 import java.time.LocalDate;
 
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.*;
 
