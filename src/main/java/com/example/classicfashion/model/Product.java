@@ -1,7 +1,6 @@
 package com.example.classicfashion.model;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -23,7 +22,7 @@ public class Product {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "productName", nullable = false,columnDefinition = "NVARCHAR(255)")
+	@Column(name = "productName", nullable = false, columnDefinition = "NVARCHAR(255)")
 	private String productName;
 
 	@ManyToOne
@@ -49,13 +48,13 @@ public class Product {
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
 	private List<OrderDetail> orderDetails;
 
-	@OneToMany(mappedBy = "productId", cascade =  CascadeType.ALL)
+	@OneToMany(mappedBy = "productId", cascade = CascadeType.ALL)
 	private List<ProductDetail> productDetails;
 
 	public Product() {
 	}
-
-	public Product(Long id, String productName, Category category, User user, String status, LocalDate createdDate, LocalDate updatedDate, List<Discount> discounts, List<OrderDetail> orderDetails, List<ProductDetail> productDetails) {
+  
+	public Product(Long id, String productName, Category category, User user, String status, LocalDate createdDate, LocalDate updateDate) {
 		this.id = id;
 		this.productName = productName;
 		this.category = category;
@@ -63,9 +62,6 @@ public class Product {
 		this.status = status;
 		this.createdDate = createdDate;
 		this.updatedDate = updatedDate;
-		this.discounts = discounts;
-		this.orderDetails = orderDetails;
-		this.productDetails = productDetails;
 	}
 
 	public Long getId() {
@@ -149,4 +145,3 @@ public class Product {
 	}
 
 }
-

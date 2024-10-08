@@ -9,7 +9,7 @@ public class ProductDetailId implements Serializable {
 	private Long colorId;
 	private Long sizeId;
 	private Long imageId;
-
+	
 	public ProductDetailId() {
 	}
 

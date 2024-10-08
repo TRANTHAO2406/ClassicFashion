@@ -1,6 +1,7 @@
 package com.example.classicfashion.model;
 
 import java.time.LocalDate;
+
 import java.util.List;
 
 import jakarta.persistence.*;
@@ -13,23 +14,18 @@ public class Image {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne
-	@JoinColumn(name = "productId", nullable = false)
-	private Product product;
-
 	@Column(name = "imgLink", nullable = false, length = 255)
 	private String imgLink;
 
 	@Column(name = "createdDate")
 	private LocalDate createdDate;
 
-	@OneToMany(mappedBy = "imageId", cascade = CascadeType.ALL)
-	private List<ProductDetail> productDetails;
+	@OneToMany(mappedBy = "imageId",cascade = CascadeType.ALL)
+	private Set<ProductDetail> productDetails;
 
-	public Image(Long id, Product product, String imgLink, LocalDate createdDate) {
+	public Image(Long id, String imgLink, LocalDate createdDate) {
 		super();
 		this.id = id;
-		this.product = product;
 		this.imgLink = imgLink;
 		this.createdDate = createdDate;
 	}
@@ -44,14 +40,6 @@ public class Image {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Product getProduct() {
-		return product;
-	}
-
-	public void setProduct(Product product) {
-		this.product = product;
 	}
 
 	public String getImgLink() {

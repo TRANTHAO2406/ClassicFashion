@@ -23,10 +23,10 @@ public class Payment {
 	@Column(name = "paymentMethod", nullable = false, unique = true, columnDefinition = "NVARCHAR(255)")
 	private String paymentMethod;
 
-	@Column(columnDefinition = "NVARCHAR(1000)")
+	@Column(name = "Description", columnDefinition = "NVARCHAR(255)")
 	private String description;
 
-	@Column(columnDefinition = "NVARCHAR(255)")
+	@Column(name = "Status", columnDefinition = "NVARCHAR(255)")
 	private String status;
 
 	@Column(name = "createdDate", nullable = false)
@@ -36,7 +36,6 @@ public class Payment {
 	private List<TransactionHistory> transactionHistories;
 
 	public Payment(Long id, String paymentMethod, String description, String status, LocalDate createdDate) {
-		super();
 		this.id = id;
 		this.paymentMethod = paymentMethod;
 		this.description = description;
@@ -45,7 +44,6 @@ public class Payment {
 	}
 
 	public Payment() {
-		super();
 	}
 
 	public Long getId() {
