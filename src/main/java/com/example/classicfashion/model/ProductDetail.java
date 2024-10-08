@@ -16,16 +16,24 @@ import jakarta.persistence.Table;
 public class ProductDetail {
 
 	@Id
-	private Long producId;
+	@ManyToOne
+	@JoinColumn(name = "productId")
+	private Product productId;
 
 	@Id
-	private Long colorId;
+	@ManyToOne
+	@JoinColumn(name = "colorId")
+	private Color colorId;
 
 	@Id
-	private Long sizeId;
+	@ManyToOne
+	@JoinColumn(name = "sizeId")
+	private Size sizeId;
 
 	@Id
-	private Long imageId;
+	@ManyToOne
+	@JoinColumn(name = "imageId")
+	private Image imageId;
 
 	@Column(nullable = false)
 	private BigDecimal price;
@@ -36,70 +44,49 @@ public class ProductDetail {
 	@Column(name = "Description")
 	private String description;
 
-	@ManyToOne
-	@JoinColumn(name = "producId", referencedColumnName = "id", nullable = false)
-	private Product product;
-
-	@ManyToOne
-	@JoinColumn(name = "colorId", referencedColumnName = "id", nullable = false)
-	private Color color;
-
-	@ManyToOne
-	@JoinColumn(name = "sizeId", referencedColumnName = "id", nullable = false)
-	private Size size;
-
-	@ManyToOne
-	@JoinColumn(name = "imageId", referencedColumnName = "id", nullable = false)
-	private Image image;
-
 	public ProductDetail() {
-		super();
 	}
 
-	public ProductDetail(Long producId, Long colorId, Long sizeId, Long imageId, BigDecimal price, Integer quantity,
-			String description, Product product, Color color, Size size, Image image) {
-		this.producId = producId;
+	public ProductDetail(Product productId, Color colorId, Size sizeId, Image imageId, BigDecimal price,
+			Integer quantity, String description) {
+		this.productId = productId;
 		this.colorId = colorId;
 		this.sizeId = sizeId;
 		this.imageId = imageId;
 		this.price = price;
 		this.quantity = quantity;
 		this.description = description;
-		this.product = product;
-		this.color = color;
-		this.size = size;
-		this.image = image;
 	}
 
-	public Long getProducId() {
-		return producId;
+	public Product getProductId() {
+		return productId;
 	}
 
-	public void setProducId(Long producId) {
-		this.producId = producId;
+	public void setProductId(Product productId) {
+		this.productId = productId;
 	}
 
-	public Long getColorId() {
+	public Color getColorId() {
 		return colorId;
 	}
 
-	public void setColorId(Long colorId) {
+	public void setColorId(Color colorId) {
 		this.colorId = colorId;
 	}
 
-	public Long getSizeId() {
+	public Size getSizeId() {
 		return sizeId;
 	}
 
-	public void setSizeId(Long sizeId) {
+	public void setSizeId(Size sizeId) {
 		this.sizeId = sizeId;
 	}
 
-	public Long getImageId() {
+	public Image getImageId() {
 		return imageId;
 	}
 
-	public void setImageId(Long imageId) {
+	public void setImageId(Image imageId) {
 		this.imageId = imageId;
 	}
 
@@ -125,38 +112,6 @@ public class ProductDetail {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public Product getProduct() {
-		return product;
-	}
-
-	public void setProduct(Product product) {
-		this.product = product;
-	}
-
-	public Color getColor() {
-		return color;
-	}
-
-	public void setColor(Color color) {
-		this.color = color;
-	}
-
-	public Size getSize() {
-		return size;
-	}
-
-	public void setSize(Size size) {
-		this.size = size;
-	}
-
-	public Image getImage() {
-		return image;
-	}
-
-	public void setImage(Image image) {
-		this.image = image;
 	}
 
 }

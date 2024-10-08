@@ -1,14 +1,15 @@
 package com.example.classicfashion.model;
 
 import java.time.LocalDate;
+import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -19,20 +20,18 @@ public class Image {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne
-	@JoinColumn(name = "productId", nullable = false)
-	private Product product;
-
 	@Column(name = "imgLink", nullable = false, length = 255)
 	private String imgLink;
 
 	@Column(name = "createdDate")
 	private LocalDate createdDate;
 
-	public Image(Long id, Product product, String imgLink, LocalDate createdDate) {
+	@OneToMany(mappedBy = "imageId",cascade = CascadeType.ALL)
+	private Set<ProductDetail> productDetails;
+
+	public Image(Long id, String imgLink, LocalDate createdDate) {
 		super();
 		this.id = id;
-		this.product = product;
 		this.imgLink = imgLink;
 		this.createdDate = createdDate;
 	}
@@ -47,14 +46,6 @@ public class Image {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Product getProduct() {
-		return product;
-	}
-
-	public void setProduct(Product product) {
-		this.product = product;
 	}
 
 	public String getImgLink() {
