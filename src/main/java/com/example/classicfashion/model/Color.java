@@ -1,11 +1,8 @@
 package com.example.classicfashion.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "COLOR")
@@ -17,6 +14,8 @@ public class Color {
 	@Column(name = "ColorName")
 	private String colorName;
 
+	@OneToMany(mappedBy = "colorId", cascade = CascadeType.ALL)
+	private List<ProductDetail> productDetails;
 	public Color() {
 	}
 

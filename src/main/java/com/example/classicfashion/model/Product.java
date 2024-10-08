@@ -30,24 +30,12 @@ public class Product {
 	@JoinColumn(name = "categoryId", nullable = false)
 	private Category category;
 
-  	@Column(nullable = false,columnDefinition = "NVARCHAR(255)")
-	private String color;
-
-	@Column(nullable = false,columnDefinition = "NVARCHAR(10)")
-	private String size;
-	
-	@Column(nullable = false,name = "price")
-	private Double price;
-	
-	@Column(nullable = false,name = "quantity")
-	private Integer quantity;
-
-	@Column(columnDefinition = "NVARCHAR(1000)")
-	private String description;
-
 	@ManyToOne
 	@JoinColumn(name = "userId")
 	private User user;
+
+	@Column(name = "status")
+	private String status;
 
 	@Column(name = "createdDate", nullable = false)
 	private LocalDate createdDate;
@@ -60,29 +48,24 @@ public class Product {
 
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
 	private List<OrderDetail> orderDetails;
-	
-	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-	private List<Image> images;
 
-	
-	public Product(Long id, String productName, Category category, String color, String size, Double price,
-			Integer quantity, String description, User user, LocalDate createdDate, LocalDate updatedDate) {
-		super();
+	@OneToMany(mappedBy = "productId", cascade =  CascadeType.ALL)
+	private List<ProductDetail> productDetails;
+
+	public Product() {
+	}
+
+	public Product(Long id, String productName, Category category, User user, String status, LocalDate createdDate, LocalDate updatedDate, List<Discount> discounts, List<OrderDetail> orderDetails, List<ProductDetail> productDetails) {
 		this.id = id;
 		this.productName = productName;
 		this.category = category;
-		this.color = color;
-		this.size = size;
-		this.price = price;
-		this.quantity = quantity;
-		this.description = description;
 		this.user = user;
+		this.status = status;
 		this.createdDate = createdDate;
 		this.updatedDate = updatedDate;
-	}
-
-	public Product() {
-		super();
+		this.discounts = discounts;
+		this.orderDetails = orderDetails;
+		this.productDetails = productDetails;
 	}
 
 	public Long getId() {
@@ -109,52 +92,20 @@ public class Product {
 		this.category = category;
 	}
 
-	public String getColor() {
-		return color;
-	}
-
-	public void setColor(String color) {
-		this.color = color;
-	}
-
-	public String getSize() {
-		return size;
-	}
-
-	public void setSize(String size) {
-		this.size = size;
-	}
-
-	public Double getPrice() {
-		return price;
-	}
-
-	public void setPrice(Double price) {
-		this.price = price;
-	}
-
-	public Integer getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(Integer quantity) {
-		this.quantity = quantity;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
 	public User getUser() {
 		return user;
 	}
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public LocalDate getCreatedDate() {
@@ -189,26 +140,13 @@ public class Product {
 		this.orderDetails = orderDetails;
 	}
 
-	public List<Image> getImages() {
-	    if (this.images == null) {
-	        this.images = new ArrayList<>();
-	    }
-	    return this.images;
+	public List<ProductDetail> getProductDetails() {
+		return productDetails;
 	}
 
-	public void setImages(List<Image> images) {
-		this.images = images;
+	public void setProductDetails(List<ProductDetail> productDetails) {
+		this.productDetails = productDetails;
 	}
-
-	@Override
-	public String toString() {
-		return "Product [id=" + id + ", productName=" + productName + ", category=" + category + ", color=" + color
-				+ ", size=" + size + ", price=" + price + ", quantity=" + quantity + ", description=" + description
-				+ ", user=" + user + ", createdDate=" + createdDate + ", updatedDate=" + updatedDate + ", discounts="
-				+ discounts + ", orderDetails=" + orderDetails + ", images=" + images + "]";
-	}
-	
-	
 
 }
 
