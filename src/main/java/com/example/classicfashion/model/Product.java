@@ -54,7 +54,7 @@ public class Product {
 	public Product() {
 	}
   
-	public Product(Long id, String productName, Category category, User user, String status, LocalDate createdDate, LocalDate updateDate) {
+	public Product(Long id, String productName, Category category, User user, String status, LocalDate createdDate, LocalDate updatedDate) {
 		this.id = id;
 		this.productName = productName;
 		this.category = category;
