@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/login")
 public class LoginController {
     private final UserService userService;
 
@@ -18,14 +17,12 @@ public class LoginController {
         this.userService = userService;
     }
 
-    @GetMapping("/loginform")
-    public String showLoginForm(Model model){
-        model.addAttribute("user", new Users());
+    @GetMapping("/login")
+    public String showLoginForm(){
         return "login";
     }
 
-    @PostMapping("/loginsuccess")
-    public String login(@ModelAttribute("user") Users user, Model model){
-        return "login";
+    public String logout(){
+        return "redirect:/home";
     }
 }

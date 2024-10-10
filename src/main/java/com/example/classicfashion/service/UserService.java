@@ -26,6 +26,7 @@ public class UserService {
 
 	public void registerUser(Users user, String role){
 		user.setPassword(passwordEncoder.encode(user.getPassword()));	//Encrypt password before saving
+		System.out.println("Mật khẩu mã hóa là: " + passwordEncoder.encode(user.getPassword()));  // In mật khẩu mã hóa
 		user.setCreatedDate(LocalDate.now());	//set createdDate
 		user.setStatus("PENDING");	//set status
 
