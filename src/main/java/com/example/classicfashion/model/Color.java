@@ -11,11 +11,12 @@ public class Color {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long Id;
-	@Column(name = "ColorName")
+	@Column(name = "ColorName", columnDefinition = "NVARCHAR(255)")
 	private String colorName;
 
 	@OneToMany(mappedBy = "colorId", cascade = CascadeType.ALL)
 	private List<ProductDetail> productDetails;
+
 	public Color() {
 	}
 

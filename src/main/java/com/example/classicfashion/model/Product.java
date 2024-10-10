@@ -144,4 +144,13 @@ public class Product {
 		this.productDetails = productDetails;
 	}
 
+	@Override
+	public String toString() {
+		return "Product [id=" + id + ", productName=" + productName + ", category=" + category + ", user=" + user
+				+ ", status=" + status + ", createdDate=" + createdDate + ", updatedDate=" + updatedDate
+				+ ", discounts=" + discounts + ", orderDetails=" + orderDetails + ", productDetails=" + productDetails
+				+ "]";
+	}
+
+	
 }

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Add Product</title>
+<link rel="stylesheet" th:href="@{/css/style.css}">
+<script>
+	function toggleAddNew(field) {
+		var selectElement = document.querySelector(`[name="${field}"]`);
+		var newField = document.getElementById(field + 'New');
+		if (selectElement.value === 'add') {
+			newField.style.display = 'block';
+		} else {
+			newField.style.display = 'none';
+			newField.querySelector('input').value = ''; // Clear the new field value
+		}
+	}
+	 function previewImage(event) {
+         var image = document.getElementById('imagePreview');
+         image.src = URL.createObjectURL(event.target.files[0]);
+         image.style.display = 'block'; // Hiện ảnh lên ngay lập tức
+     }
+
+     function showSuccessMessage() {
+         document.getElementById('successMessage').style.display = 'block';
+     }
+</script>
+</head>
+<body>
+	<h1>Add Product</h1>
+	<form th:action="@{/product/add}" th:object="${product}" method="post" enctype="multipart/form-data">
+		<div>
+			<label>Product Name:</label>
+			<input type="text" th:field="*{productName}" required />
+		</div>
+
+		<div>
+			<label>Category:</label>
+			<select th:field="*{category.id}" name="category" onchange="toggleAddNew('category')" required>
+				<option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.categoryName}"></option>
+				<option value="add">Add new</option>
+			</select>
+			<div id="categoryNew" style="display: none;">
+				<label>New Category Name:</label>
+				<input type="text" name="newCategory" />
+			</div>
+		</div>
+
+		<h3>Product Details</h3>
+		<div th:each="detail, iterStat : ${product.productDetails}">
+			<div>
+				<label>Color:</label>
+				<select th:field="*{productDetails[__${iterStat.index}__].colorId}" name="color" onchange="toggleAddNew('color')" required>
+					<option th:each="color : ${colors}" th:value="${color.id}" th:text="${color.colorName}"></option>
+					<option value="add">Add new</option>
+				</select>
+				<div id="colorNew" style="display: none;">
+					<label>New Color Name:</label>
+					<input type="text" name="newColor" />
+				</div>
+
+				<label>Size:</label>
+				<select th:field="*{productDetails[__${iterStat.index}__].sizeId}" name="size" onchange="toggleAddNew('size')" required>
+					<option th:each="size : ${sizes}" th:value="${size.id}" th:text="${size.sizeName}"></option>
+					<option value="add">Add new</option>
+				</select>
+				<div id="sizeNew" style="display: none;">
+					<label>New Size Name:</label>
+					<input type="text" name="newSize" />
+				</div>
+
+				<label>Price:</label>
+				<input type="number" th:field="*{productDetails[__${iterStat.index}__].price}" required />
+
+				<label>Quantity:</label>
+				<input type="number" th:field="*{productDetails[__${iterStat.index}__].quantity}" required />
+			</div>
+		</div>
+
+		<h3>Add Image and Description</h3>
+        <div>
+            <label>Images:</label>
+    		<input type="file" name="newImages" accept="image/*" multiple required onchange="previewImage(event)" />	
+        </div>
+        
+        <img id="imagePreview" style="display:none; width:100px; height:100px;" />
+
+        <div>
+            <label>Description:</label>
+            <textarea name="description" required></textarea>
+        </div>
+
+        <button type="submit">Add Product</button>
+    </form>
+
+    <div id="successMessage" style="display:none; color: green;">
+        Sản phẩm đã được thêm thành công!
+    </div>
+</body>
+</html>

@@ -125,4 +125,5 @@ public class ProductDetail {
 	public int hashCode() {
 		return Objects.hash(getProductId(), getColorId(), getSizeId(), getImageId(), getPrice(), getQuantity(), getDescription());
 	}
+
 }

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Configure Product Details</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script>
+        function previewImage(event) {
+            var image = document.getElementById('imagePreview');
+            image.src = URL.createObjectURL(event.target.files[0]);
+            image.style.display = 'block'; // Hiện ảnh ngay lập tức
+        }
+    </script>
+</head>
+<body>
+    <h1>Configure Product: [[${productName}]] - [[${sizeName}]] - [[${colorName}]]</h1>
+
+    <!-- Form để cấu hình giá, số lượng, và tải ảnh cho tổ hợp size-color -->
+    <form th:action="@{/product/config/save}" method="post" enctype="multipart/form-data">
+        <!-- Trường ẩn để lưu thông tin sản phẩm, size và color -->
+        <input type="hidden" th:field="*{productId}" />
+        <input type="hidden" th:field="*{sizeId}" />
+        <input type="hidden" th:field="*{colorId}" />
+
+        <!-- Nhập giá cho tổ hợp size và color -->
+        <div>
+            <label>Price:</label>
+            <input type="number" th:field="*{price}" required />
+        </div>
+
+        <!-- Nhập số lượng cho tổ hợp size và color -->
+        <div>
+            <label>Quantity:</label>
+            <input type="number" th:field="*{quantity}" required />
+        </div>
+
+        <!-- Tải lên hình ảnh riêng cho tổ hợp size và color -->
+        <div>
+            <label>Images:</label>
+            <input type="file" name="productImages" accept="image/*" multiple required onchange="previewImage(event)" />
+        </div>
+        
+        <!-- Preview hình ảnh sau khi chọn -->
+        <img id="imagePreview" style="display:none; width:100px; height:100px;" />
+
+        <button type="submit">Save</button>
+    </form>
+</body>
+</html>
+

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Giỏ hàng</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="container">
+		<h2 style="color: red">Giỏ hàng</h2>
+		<div class="alert alert-info">
+			<strong>Số sản phẩm đã chọn: <span id="selected-count">0</span></strong>
+		</div>
+		<div class="rows">
+			<div class="col-sm-9">
+				<table class="table">
+					<thead>
+						<tr style="background: aqua">
+							<th><input type="checkbox" id="selectAll"> Chọn tất cả</th>
+							<th>Hình ảnh</th>
+							<th>Tên</th>
+							<th>Giá</th>
+							<th>Số lượng</th>
+							<th>Thành tiền</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="item : ${cartItems}">
+							<td><input type="checkbox" class="product-checkbox"
+								th:attr="data-id=${item.productID}" ></td>
+							<td><img th:src="@{/img/vay.jpg}" width="50" height="50" /></td>
+							<td th:text="${item.name}"></td>
+							<td th:text="${item.price}" th:attr="data-price=${item.price}"></td>
+							<td>
+								<form th:action="@{/shopping-cart/update}" method="post" style="display: inline;">
+									<input type="hidden" name="id" th:value="${item.productID}" />
+									<input type="hidden" name="qty" th:value="${item.qty - 1}" />
+									<button type="submit" class="btn btn-danger btn-sm">-</button>
+								</form> <input type="number" name="qty" th:value="${item.qty}"
+								th:attr="data-id=${item.productID}"
+								style="width: 50px; text-align: center;" min="1" readonly>
+								<form th:action="@{/shopping-cart/update}" method="post" style="display: inline;">
+									<input type="hidden" name="id" th:value="${item.productID}" />
+									<input type="hidden" name="qty" th:value="${item.qty + 1}" />
+									<button type="submit" class="btn btn-success btn-sm">+</button>
+								</form>
+
+							</td>
+							<td class="item-total" th:text="${item.price * item.qty}" th:attr="data-total=${item.price * item.qty}"></td>
+							<td><a class="btn btn-sm btn-danger"
+								th:href="@{/shopping-cart/delete/{id}(id=${item.productID})}">Xoá</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<p>
+					Tổng tiền: <span id="cart-total">0</span>
+				</p>
+				<hr />
+				<a class="btn btn-primary btn-sm" href="#">Thanh toán</a>
+			</div>
+		</div>
+	</div>
+
+	<script th:inline="javascript">
+	$(document).ready(function () {
+	    loadCheckboxState();
+
+	    $('#selectAll').click(
+	        function () {
+	            var checked = $(this).prop('checked');
+	            $('.product-checkbox').prop('checked',
+	                checked);
+	            updateSelectedCount();
+	            updateCartTotal();
+	            saveCheckboxState();
+	        });
+
+	    $('.product-checkbox')
+	        .click(
+	            function () {
+	                $('#selectAll')
+	                    .prop(
+	                        'checked',
+	                        $('.product-checkbox:checked').length === $('.product-checkbox').length);
+	                updateSelectedCount();
+	                updateCartTotal();
+	                saveCheckboxState();
+	            });
+
+	    updateSelectedCount();
+	    updateCartTotal();
+	});
+
+		function loadCheckboxState() {
+			var savedState = JSON.parse(localStorage
+					.getItem('cartCheckboxState'))
+					|| {};
+			$('.product-checkbox').each(function() {
+				var productId = $(this).data('id');
+				if (savedState[productId]) {
+					$(this).prop('checked', true);
+				}
+			});
+			updateSelectedCount();
+			updateCartTotal();
+		}
+
+		function saveCheckboxState() {
+			var state = {};
+			$('.product-checkbox').each(function() {
+				var productId = $(this).data('id');
+				state[productId] = $(this).prop('checked');
+			});
+			localStorage.setItem('cartCheckboxState', JSON.stringify(state));
+		}
+
+		function updateSelectedCount() {
+			$('#selected-count').text($('.product-checkbox:checked').length);
+		}
+
+		function changeQuantity(button, change) {
+			var input = $(button).siblings('input[type=number]');
+			var currentQty = parseInt(input.val());
+			var newQty = currentQty + change;
+			if (newQty >= 1) {
+				input.val(newQty);
+				updateItem(input);
+			}
+		}
+
+		function updateItem(input) {
+			var productId = $(input).data('id');
+			var newQuantity = $(input).val();
+			var price = parseFloat($(input).closest('tr').find('[data-price]')
+					.text());
+		}
+
+		function updateCartTotal() {
+			var total = 0;
+			$('.product-checkbox:checked').each(
+					function() {
+						var itemTotal = parseFloat($(this).closest('tr').find(
+								'.item-total').attr('data-total'));
+						total += itemTotal;
+					});
+			$('#cart-total').text(total.toFixed(2));
+		}
+	</script>
+</body>
+</html>
