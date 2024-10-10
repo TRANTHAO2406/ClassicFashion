@@ -27,20 +27,22 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/auth/**", "/login/**").permitAll()  // Không cần xác thực
-                        .requestMatchers("/admin/**").hasRole("ADMIN")  // Chỉ admin mới được truy cập
-                        .anyRequest().authenticated()  // Mọi yêu cầu khác phải đăng nhập
+                        .requestMatchers("/auth/**", "/login/**").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")  // only admin
+                        .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login")  // Đường dẫn trang đăng nhập
+                        .loginPage("/login")
                         .loginProcessingUrl("/login")
+                        .usernameParameter("username")
+                        .passwordParameter("password")
                         .defaultSuccessUrl("/home", true)
                         .failureUrl("/login?error=true")
                         .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/home") // Chuyển hướng sau khi đăng xuất
+                        .logoutSuccessUrl("/home")
                         .permitAll()
                 );
         return http.build();

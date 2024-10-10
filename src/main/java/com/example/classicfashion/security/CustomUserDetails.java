@@ -49,7 +49,6 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        System.out.println("Trạng thái của người dùng: " + user.getStatus());
         return user.getStatus().equalsIgnoreCase("ACTIVE");
     }
 }

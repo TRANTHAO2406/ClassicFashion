@@ -9,7 +9,7 @@
     <div>
         <label>Email:</label>
         <input type="email" th:field="*{email}" />
-        <!-- Hiển thị lỗi nếu có -->
+        <!-- show error -->
         <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email không hợp lệ!</p>
     </div>
     <div>

@@ -26,7 +26,6 @@ public class UserService {
 
 	public void registerUser(Users user, String role){
 		user.setPassword(passwordEncoder.encode(user.getPassword()));	//Encrypt password before saving
-		System.out.println("Mật khẩu mã hóa là: " + passwordEncoder.encode(user.getPassword()));  // In mật khẩu mã hóa
 		user.setCreatedDate(LocalDate.now());	//set createdDate
 		user.setStatus("PENDING");	//set status
 
@@ -36,13 +35,6 @@ public class UserService {
 
 		UserRole userRoleModel = new UserRole(savedUser, userRole);
 		savedUser.getUserRoles().add(userRoleModel);
-	}
-
-	public Optional<Users> findByEmail(String email){
-		return userRepository.findUserByEmail(email);
-	}
-	public List<Users> getAllUser() {
-		return userRepository.findAll();
 	}
 
 }

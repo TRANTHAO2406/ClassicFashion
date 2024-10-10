@@ -5,24 +5,22 @@
 </head>
 <body>
 <h2>Đăng nhập</h2>
-<form th:action="@{/login}" method="post">  <!-- Spring Security sẽ tự động xử lý login -->
+<form th:action="@{/login}" method="post">
     <div>
         <label>Email:</label>
-        <input type="text" name="username" required />  <!-- Thuộc tính "username" bắt buộc để Spring Security nhận diện -->
+        <input type="text" name="username" required />
     </div>
     <div>
         <label>Mật khẩu:</label>
-        <input type="password" name="password" required />  <!-- Thuộc tính "password" bắt buộc -->
+        <input type="password" name="password" required />
     </div>
     <div>
         <button type="submit">Đăng nhập</button>
     </div>
 </form>
 
-<!-- Hiển thị thông báo lỗi nếu thông tin đăng nhập không đúng -->
 <p th:if="${param.error}" th:text="'Email hoặc mật khẩu không đúng!'">Email hoặc mật khẩu không đúng!</p>
 
-<!-- Link đến trang quên mật khẩu -->
 <a th:href="@{/auth/forgot-password}">Quên mật khẩu?</a>
 </body>
 </html>
