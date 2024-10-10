@@ -12,7 +12,7 @@ public class Size {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long Id;
 
-	@Column(name = "SizeName")
+	@Column(name = "SizeName", columnDefinition = "NVARCHAR(255)")
 	private String sizeName;
 
 	@OneToMany(mappedBy = "sizeId", cascade = CascadeType.ALL)

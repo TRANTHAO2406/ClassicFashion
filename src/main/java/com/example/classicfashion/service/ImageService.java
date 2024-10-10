@@ -1,6 +1,7 @@
 package com.example.classicfashion.service;
 
-import com.example.classicfashion.repository.ImageRepository;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.example.classicfashion.model.Image;
@@ -20,6 +21,9 @@ public class ImageService {
 
 	public void deleteById(Long Id) {
 		imageRepository.deleteById(Id);
+	}
+	public List<Image> findAll(){
+		return imageRepository.findAll();
 	}
 
 }

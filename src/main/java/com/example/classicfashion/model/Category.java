@@ -77,4 +77,5 @@ public class Category {
 	public void setUpdatedDate(LocalDate updatedDate) {
 		this.updatedDate = updatedDate;
 	}
+
 }

@@ -130,4 +130,12 @@ public class Discount {
 		this.productName = productName;
 	}
 
+	@Override
+	public String toString() {
+		return "Discount [id=" + id + ", discountPercent=" + discountPercent + ", startDate=" + startDate + ", endDate="
+				+ endDate + ", createdDate=" + createdDate + ", updatedDate=" + updatedDate + ", product=" + product
+				+ ", productName=" + productName + "]";
+	}
+	
+
 }
