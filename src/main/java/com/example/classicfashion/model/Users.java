@@ -1,8 +1,5 @@
 package com.example.classicfashion.model;
 
-import java.time.LocalDate;
-import java.util.List;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,12 +13,18 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "USERS")
-public class User {
+public class Users {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
 	@Email(message = "Email phải đúng định dạng.")
 	@NotBlank(message = "Email không được để trống.")
 	@Column(nullable = false, unique = true)
@@ -56,20 +59,11 @@ public class User {
 	private LocalDate updatedDate;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	private List<UserRole> userRoles;
+	private List<UserRole> userRoles = new ArrayList<>();  // Khởi tạo danh sách userRoles
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	private List<Order> orders;
-
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	private List<Product> products;
-
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	private List<Token> tokens;
-
-	public User(Long id, String email, String password, String userName, String phone, String address, String status,
-			LocalDate createdDate, LocalDate updatedDate) {
-		super();
+	// Constructor đầy đủ tham số
+	public Users(Long id, String email, String password, String userName, String phone, String address, String status,
+				 LocalDate createdDate, LocalDate updatedDate) {
 		this.id = id;
 		this.email = email;
 		this.password = password;
@@ -79,11 +73,15 @@ public class User {
 		this.status = status;
 		this.createdDate = createdDate;
 		this.updatedDate = updatedDate;
+		this.userRoles = new ArrayList<>();  // Khởi tạo danh sách userRoles trong constructor có tham số
 	}
 
-	public User() {
-		super();
+	// Constructor mặc định
+	public Users() {
+		this.userRoles = new ArrayList<>();  // Khởi tạo danh sách userRoles trong constructor mặc định
 	}
+
+	// Getters và Setters
 
 	public Long getId() {
 		return id;
@@ -165,19 +163,19 @@ public class User {
 		this.userRoles = userRoles;
 	}
 
-	public List<Order> getOrders() {
-		return orders;
-	}
-
-	public void setOrders(List<Order> orders) {
-		this.orders = orders;
-	}
-
-	public List<Product> getProducts() {
-		return products;
-	}
-
-	public void setProducts(List<Product> products) {
-		this.products = products;
+	@Override
+	public String toString() {
+		return "Users{" +
+				"id=" + id +
+				", email='" + email + '\'' +
+				", password='" + password + '\'' +
+				", userName='" + userName + '\'' +
+				", phone='" + phone + '\'' +
+				", address='" + address + '\'' +
+				", status='" + status + '\'' +
+				", createdDate=" + createdDate +
+				", updatedDate=" + updatedDate +
+				", userRoles=" + userRoles +
+				'}';
 	}
 }

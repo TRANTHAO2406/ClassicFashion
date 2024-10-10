@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Đăng ký</title>
+</head>
+<body>
+<h2>Đăng ký tài khoản</h2>
+<form th:action="@{/auth/registersuccess}" th:object="${user}" method="post">
+    <div>
+        <label>Email:</label>
+        <input type="email" th:field="*{email}" />
+        <!-- Hiển thị lỗi nếu có -->
+        <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email không hợp lệ!</p>
+    </div>
+    <div>
+        <label>Mật khẩu:</label>
+        <input type="password" th:field="*{password}" />
+        <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Mật khẩu không hợp lệ!</p>
+    </div>
+    <div>
+        <label>Tên người dùng:</label>
+        <input type="text" th:field="*{userName}" />
+        <p th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}">Tên người dùng không hợp lệ!</p>
+    </div>
+    <div>
+        <label>Số điện thoại:</label>
+        <input type="text" th:field="*{phone}" />
+        <p th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">Số điện thoại không hợp lệ!</p>
+    </div>
+    <div>
+        <label>Địa chỉ:</label>
+        <input type="text" th:field="*{address}" />
+        <p th:if="${#fields.hasErrors('address')}" th:errors="*{address}">Địa chỉ không hợp lệ!</p>
+    </div>
+    <button type="submit">Đăng ký</button>
+</form>
+</body>
+</html>

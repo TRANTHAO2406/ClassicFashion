@@ -31,7 +31,7 @@ public class Product {
 
 	@ManyToOne
 	@JoinColumn(name = "userId")
-	private User user;
+	private Users user;
 
 	@Column(name = "status")
 	private String status;
@@ -54,7 +54,7 @@ public class Product {
 	public Product() {
 	}
   
-	public Product(Long id, String productName, Category category, User user, String status, LocalDate createdDate, LocalDate updatedDate) {
+	public Product(Long id, String productName, Category category, Users user, String status, LocalDate createdDate, LocalDate updatedDate) {
 		this.id = id;
 		this.productName = productName;
 		this.category = category;
@@ -88,11 +88,11 @@ public class Product {
 		this.category = category;
 	}
 
-	public User getUser() {
+	public Users getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(Users user) {
 		this.user = user;
 	}
 

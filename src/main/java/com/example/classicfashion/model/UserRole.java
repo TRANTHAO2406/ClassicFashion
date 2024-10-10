@@ -16,7 +16,7 @@ public class UserRole {
 	@Id
 	@ManyToOne
 	@JoinColumn(name = "userId")
-	private User user;
+	private Users user;
 
 	@Id
 	@ManyToOne
@@ -26,16 +26,16 @@ public class UserRole {
 	public UserRole() {
 	}
 
-	public UserRole(User user, Role role) {
+	public UserRole(Users user, Role role) {
 		this.user = user;
 		this.role = role;
 	}
 
-	public User getUser() {
+	public Users getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(Users user) {
 		this.user = user;
 	}
 
