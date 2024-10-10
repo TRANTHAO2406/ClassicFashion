@@ -24,7 +24,7 @@ public class Order {
 
 	@ManyToOne
 	@JoinColumn(name = "userId")
-	private User user;
+	private Users user;
 
 	@Column(name = "orderDate", nullable = false)
 	private LocalDate orderDate;
@@ -47,8 +47,8 @@ public class Order {
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
 	private List<OrderDetail> orderDetails;
 
-	public Order(Long id, User user, LocalDate orderDate, Double shippingPrice, Double totalPrice, String status,
-			LocalDate updatedDate, List<TransactionHistory> transactionHistories, List<OrderDetail> orderDetails) {
+	public Order(Long id, Users user, LocalDate orderDate, Double shippingPrice, Double totalPrice, String status,
+				 LocalDate updatedDate, List<TransactionHistory> transactionHistories, List<OrderDetail> orderDetails) {
 		this.id = id;
 		this.user = user;
 		this.orderDate = orderDate;
@@ -71,11 +71,11 @@ public class Order {
 		this.id = id;
 	}
 
-	public User getUser() {
+	public Users getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(Users user) {
 		this.user = user;
 	}
 
