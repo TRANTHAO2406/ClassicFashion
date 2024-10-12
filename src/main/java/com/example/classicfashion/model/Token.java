@@ -1,7 +1,6 @@
 package com.example.classicfashion.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -9,25 +8,20 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "TOKEN")
 public class Token {
-    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
-    @Getter
     @Column(name = "token")
     private String token;
 
-    @Getter
     @ManyToOne
     @JoinColumn(name = "userId")
     private Users user;
 
-    @Getter
     @Column(name = "createdDate")
     private LocalDateTime createdDate;
 
-    @Getter
     @Column(name = "expiryDate")
     private LocalDateTime expiryDate;
 
@@ -71,5 +65,29 @@ public class Token {
 
     public void setUsed(boolean used) {
         isUsed = used;
+    }
+
+    public Long getId() {
+        return Id;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public Users getUser() {
+        return user;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public LocalDateTime getExpiryDate() {
+        return expiryDate;
+    }
+
+    public boolean isUsed() {
+        return isUsed;
     }
 }

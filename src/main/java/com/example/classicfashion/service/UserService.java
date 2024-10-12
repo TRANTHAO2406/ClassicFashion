@@ -7,6 +7,7 @@ import java.util.Optional;
 import com.example.classicfashion.model.Role;
 import com.example.classicfashion.model.UserRole;
 import com.example.classicfashion.repository.RoleRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +24,11 @@ public class UserService {
 		this.roleRepository = roleRepository;
 		this.passwordEncoder = passwordEncoder;
 	}
-
+	private static final BCryptPasswordEncoder passwordEcorder = new BCryptPasswordEncoder();
 	public void registerUser(Users user, String role){
+		System.out.println("Mật khẩu trước mã hóa" + user.getPassword());
 		user.setPassword(passwordEncoder.encode(user.getPassword()));	//Encrypt password before saving
+		System.out.println("Mật khẩu sau mã hóa" + user.getPassword());
 		user.setCreatedDate(LocalDate.now());	//set createdDate
 		user.setStatus("PENDING");	//set status
 
@@ -37,4 +40,16 @@ public class UserService {
 		savedUser.getUserRoles().add(userRoleModel);
 	}
 
+	public Users findbyEmail(String email){
+		return userRepository.findByEmail(email).orElse(null);
+	}
+
+	public void updatePassword(Users user, String newPassword){
+		user.setPassword(passwordEncoder.encode(newPassword));
+		userRepository.save(user);
+	}
+
+	public Boolean doPasswordMatch(String rawPassword, String encodedPassword){
+		return passwordEcorder.matches(rawPassword, encodedPassword);
+	}
 }
