@@ -30,9 +30,9 @@ public class Users {
 	@Column(nullable = false, unique = true)
 	private String email;
 
-	@NotBlank(message = "Mật khẩu không được để trống.")
-	@Size(min = 8, message = "Mật khẩu phải có ít nhất 8 ký tự.")
-	@Pattern(regexp = ".*[A-Z].*", message = "Mật khẩu phải có ít nhất 1 ký tự viết hoa.")
+//	@NotBlank(message = "Mật khẩu không được để trống.")
+//	@Size(min = 8, message = "Mật khẩu phải có ít nhất 8 ký tự.")
+//	@Pattern(regexp = ".*[A-Z].*", message = "Mật khẩu phải có ít nhất 1 ký tự viết hoa.")
 	@Column(nullable = false)
 	private String password;
 
@@ -57,6 +57,9 @@ public class Users {
 
 	@Column(name = "updatedDate")
 	private LocalDate updatedDate;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private List<PasswordResetToken> passwordResetTokens;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<UserRole> userRoles = new ArrayList<>();  // Khởi tạo danh sách userRoles
