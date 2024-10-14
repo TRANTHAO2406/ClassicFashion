@@ -76,7 +76,10 @@ public class ProductController {
 			@RequestParam List<BigDecimal> prices,
 			@RequestParam List<Integer> quantities,
 			@RequestParam(required = false) String newCategory) {
+//		  System.out.println("Parameters: " + params);
 		System.out.println("newImages content:"+ newImages);
+//		 System.out.println("New Images: " + newImages.keySet() +"--"+ newImages.values());
+// 
 // Xử lý màu sắc
 		List<Color> colorList = new ArrayList<>();
 		for (String colorName : newColors) {
@@ -122,15 +125,15 @@ public class ProductController {
 	            detail.setQuantity(quantities.get(index));
 
 	            // Lấy các hình ảnh cho chi tiết sản phẩm
-//	            String key = product.getProductName() + "-" + color.getColorName() + "-" + size.getSizeName();
+	            String key = product.getProductName() + "-" + color.getColorName() + "-" + size.getSizeName();
 	          //  MultipartFile[] imagesForDetailFiles = newImages.get(key);
 	            MultipartFile[] imagesForDetailFiles = newImages;
 	            if (imagesForDetailFiles != null) {
 	                List<Image> imagesForDetail = imageService.uploadImages(imagesForDetailFiles); // Lưu ảnh và nhận lại danh sách các đường dẫn
 	                for (Image image : imagesForDetail) {
-	                    image.setProductDetail(detail); 
+	                    image.setProductDetail(detail); // Thiết lập liên kết về ProductDetail
 	                }
-	                detail.setImages(imagesForDetail); 
+	                detail.setImages(imagesForDetail); // Thiết lập danh sách ảnh cho ProductDetail
 	            }
 
 	            productDetails.add(detail);
@@ -141,6 +144,10 @@ public class ProductController {
 	    product.setProductDetails(productDetails);
 	    product.setCreatedDate(LocalDate.now());
 	    product.setStatus(1);
+
+	    // Kiểm tra sản phẩm trước khi lưu
+	    System.out.println("Sản phẩm sắp lưu: " + product.getProductName());
+	    System.out.println("Số lượng chi tiết sản phẩm: " + productDetails.size());
 
 	    productService.save(product);
 	    return "redirect:/product/view";
