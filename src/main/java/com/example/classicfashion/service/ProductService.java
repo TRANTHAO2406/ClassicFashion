@@ -19,15 +19,16 @@ public class ProductService {
 		productRepository.save(Product);
 	}
 
-	public void deleteById(Long Id) {
-		productRepository.deleteById(Id);
-	}
-
 	public List<Product> getAll() {
 		return productRepository.findAll();
 	}
+	public List<Product> getProductsByStatus(int status) {
+        return productRepository.findByStatus(status);
+    }
 
+	
 	public Product findById(Long Id) {
 		return productRepository.findById(Id).orElseThrow(() -> new IllegalArgumentException("Khong tim thay Product"));
 	}
+	
 }

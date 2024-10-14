@@ -7,6 +7,7 @@ import com.example.classicfashion.model.Size;
 
 @Repository
 public interface SizeRepository extends JpaRepository<Size, Long> {
+	 Size findBySizeName(String sizeName);
 
 }
 	

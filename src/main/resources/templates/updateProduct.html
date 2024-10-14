@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cập nhật sản phẩm</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .remove-btn {
+            color: red;
+            cursor: pointer;
+        }
+        .image-preview img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+        .table th, .table td {
+            vertical-align: middle;
+        }
+        .remove-image-btn {
+            background: none;
+            border: none;
+            color: red;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Cập nhật sản phẩm</h1>
+        <form th:action="@{/product/update/{id}(id=${product.id})}" th:object="${product}" method="post" enctype="multipart/form-data">
+            <!-- Tên sản phẩm -->
+            <div class="form-group">
+                <label for="productName">Tên sản phẩm:</label>
+                <input type="text" id="productName" class="form-control" th:field="*{productName}" required />
+            </div>
+
+            <!-- Danh mục -->
+            <div class="form-group">
+                <label for="category">Danh mục:</label>
+                <div id="category" th:field="*{category.id}" class="form-control" required>
+                    <a th:each="category : ${categories}" th:value="${category.id}" th:text="${category.categoryName}"></a>
+                </div>
+            </div>
+
+            <!-- Trạng thái -->
+            <div class="form-group">
+                <label for="status">Trạng thái:</label>
+                <select id="status" th:field="*{status}" class="form-control">
+                    <option value="1" th:selected="${product.status == 1}">Kích hoạt</option>
+                    <option value="0" th:selected="${product.status == 0}">Vô hiệu</option>
+                </select>
+            </div>
+
+            <!-- Hiển thị bảng thông tin sản phẩm -->
+            <div class="form-group">
+                <label>Chi tiết sản phẩm:</label>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Hình ảnh</th>
+                            <th>Kích thước</th>
+                            <th>Màu sắc</th>
+                            <th>Giá</th>
+                            <th>Số lượng</th>
+                            <th>Xóa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="detail, iterStat : ${product.productDetails}">
+                            <!-- Hình ảnh -->
+                            <td class="image-preview">
+                                <ul class="list-unstyled">
+                                    <li th:each="image : ${detail.images}">
+                                        <img th:src="@{${image.imgLink}}" alt="Product Image" class="img-fluid" />
+                                    </li>
+                                </ul>
+                                <span th:if="${#lists.isEmpty(detail.images)}">Chưa có hình ảnh</span>
+                            </td>
+                            <!-- Kích thước -->
+                            <td th:text="${detail.sizeId.sizeName}"></td>
+                            <!-- Màu sắc -->
+                            <td th:text="${detail.colorId.colorName}"></td>
+                            <!-- Giá -->
+                            <td>
+                                <input type="number" class="form-control" th:field="*{productDetails[__${iterStat.index}__].price}" placeholder="Nhập giá" required />
+                            </td>
+                            <td>
+                                <input type="number" class="form-control" th:field="*{productDetails[__${iterStat.index}__].quantity}" placeholder="Nhập số lượng" required />
+                            </td>
+                            <!-- Nút xóa -->
+                            <td>
+                                <button type="button" class="btn btn-danger" onclick="removeRow(this)">Xóa</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Cập nhật sản phẩm</button>
+        </form>
+    </div>
+
+    <script>
+        // Xóa hàng trong bảng
+        function removeRow(button) {
+            button.closest('tr').remove();
+        }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -7,5 +7,5 @@ import com.example.classicfashion.model.Color;
 
 @Repository
 public interface ColorRepository extends JpaRepository<Color, Long>  {
-
+	Color findByColorName(String colorName);
 }
