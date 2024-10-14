@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách sản phẩm</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Danh sách sản phẩm</h1>
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Danh mục</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Hình ảnh</th>
+                    <th>Kích thước</th>
+                    <th>Màu sắc</th>
+                    <th>Ngày tạo</th>
+                    <th>Ngày cập nhật</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="product : ${products}">
+                    <td th:text="${product.id}"></td>
+                    <td th:text="${product.category.categoryName}"></td>
+                    <td th:text="${product.productName}"></td>
+                    <td>
+                        <ul class="list-unstyled">
+                            <li th:each="detail : ${product.productDetails}">
+                                <ul>
+                                    <li th:each="image : ${detail.images}" th:if="${image != null}">
+                                        <img th:src="@{${image.imgLink}}" alt="Product Image" class="img-fluid" width="100" height="100" />
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul class="list-unstyled">
+                            <li th:each="size : ${#sets.toSet(product.productDetails.![sizeId.sizeName])}">
+                                <span th:text="${size}"></span>
+                            </li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul class="list-unstyled">
+                            <li th:each="color : ${#sets.toSet(product.productDetails.![colorId.colorName])}">
+                                <span th:text="${color}"></span>
+                            </li>
+                        </ul>
+                    </td>
+                    <td th:text="${product.createdDate}"></td>
+                    <td th:text="${product.updatedDate}"></td>
+                    <td>
+                        <a th:href="@{/product/update/{id}(id=${product.id})}" class="btn btn-warning">Cập nhật</a>
+                        <a th:href="@{/product/delete/{id}(id=${product.id})}" class="btn btn-danger">Xóa</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <a href="/product/add" class="btn btn-primary">Thêm sản phẩm mới</a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

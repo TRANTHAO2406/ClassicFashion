@@ -28,4 +28,9 @@ public class SizeService {
 		return sizeRepository.findById(id).orElse(null);
 	}
 
+
+	public Size findByName(String sizeName) {
+		return sizeRepository.findBySizeName(sizeName);
+	}
+
 }

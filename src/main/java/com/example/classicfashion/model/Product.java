@@ -34,7 +34,7 @@ public class Product {
 	private Users user;
 
 	@Column(name = "status")
-	private String status;
+	private int status;
 
 	@Column(name = "createdDate", nullable = false)
 	private LocalDate createdDate;
@@ -54,7 +54,7 @@ public class Product {
 	public Product() {
 	}
   
-	public Product(Long id, String productName, Category category, Users user, String status, LocalDate createdDate, LocalDate updatedDate) {
+	public Product(Long id, String productName, Category category, Users user, int status, LocalDate createdDate, LocalDate updatedDate) {
 		this.id = id;
 		this.productName = productName;
 		this.category = category;
@@ -96,11 +96,11 @@ public class Product {
 		this.user = user;
 	}
 
-	public String getStatus() {
+	public int getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
 

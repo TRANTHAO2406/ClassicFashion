@@ -26,6 +26,10 @@ public class ColorService {
 	public Color findById(Long id) {
 		return colorRepository.findById(id).orElse(null);
 	}
+
+	public Color findByName(String colorName) {
+		  return colorRepository.findByColorName(colorName);
+	}
 	
 
 }

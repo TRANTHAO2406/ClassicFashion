@@ -1,99 +1,242 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>Add Product</title>
-<link rel="stylesheet" th:href="@{/css/style.css}">
-<script>
-	function toggleAddNew(field) {
-		var selectElement = document.querySelector(`[name="${field}"]`);
-		var newField = document.getElementById(field + 'New');
-		if (selectElement.value === 'add') {
-			newField.style.display = 'block';
-		} else {
-			newField.style.display = 'none';
-			newField.querySelector('input').value = ''; // Clear the new field value
-		}
-	}
-	 function previewImage(event) {
-         var image = document.getElementById('imagePreview');
-         image.src = URL.createObjectURL(event.target.files[0]);
-         image.style.display = 'block'; // Hiện ảnh lên ngay lập tức
-     }
+    <meta charset="UTF-8">
+    <title>Thêm sản phẩm</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .input-group {
+            margin-bottom: 10px;
+        }
 
-     function showSuccessMessage() {
-         document.getElementById('successMessage').style.display = 'block';
-     }
-</script>
+        .color-size-list {
+            margin-top: 5px;
+        }
+
+        .remove-btn {
+            color: red;
+            cursor: pointer;
+        }
+
+        .table td, .table th {
+            vertical-align: middle;
+        }
+
+        .image-preview {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            margin-right: 5px;
+            position: relative;
+        }
+
+        .remove-image-btn {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: none;
+            border: none;
+            color: red;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        input[type="file"] {
+            color: transparent;
+            margin-bottom: 1%;
+        }
+    </style>
 </head>
 <body>
-	<h1>Add Product</h1>
-	<form th:action="@{/product/add}" th:object="${product}" method="post" enctype="multipart/form-data">
-		<div>
-			<label>Product Name:</label>
-			<input type="text" th:field="*{productName}" required />
-		</div>
+    <div class="container">
+        <h1 class="mt-4">Thêm sản phẩm</h1>
+        <form th:action="@{/product/add}" th:object="${product}" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="category">Danh mục:</label>
+                <select id="category" th:field="*{category}" class="form-control" required>
+                    <option value="" disabled selected>Chọn danh mục</option>
+                    <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.categoryName}"></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="productName">Tên sản phẩm:</label>
+                <input type="text" id="productName" class="form-control" th:field="*{productName}" required />
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col">
+                        <label for="colorInput">Nhập màu sắc:</label>
+                        <input type="text" id="colorInput" class="form-control" />
+                        <div class="color-size-list" id="colorList"></div>
+                    </div>
+                    <div class="col">
+                        <label for="sizeInput">Nhập kích thước:</label>
+                        <input type="text" id="sizeInput" class="form-control" />
+                        <div class="color-size-list" id="sizeList"></div>
+                    </div>
+                </div>
+            </div>
 
-		<div>
-			<label>Category:</label>
-			<select th:field="*{category.id}" name="category" onchange="toggleAddNew('category')" required>
-				<option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.categoryName}"></option>
-				<option value="add">Add new</option>
-			</select>
-			<div id="categoryNew" style="display: none;">
-				<label>New Category Name:</label>
-				<input type="text" name="newCategory" />
-			</div>
-		</div>
+            <table class="table table-bordered" id="productTable">
+                <thead>
+                    <tr>
+                        <th>Tên sản phẩm</th>
+                        <th>Màu sắc</th>
+                        <th>Kích thước</th>
+                        <th>Giá</th>
+                        <th>Số lượng</th>
+                        <th>Hình ảnh</th>
+                        <th>Xóa</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dữ liệu sẽ được thêm vào đây -->
+                </tbody>
+            </table>
 
-		<h3>Product Details</h3>
-		<div th:each="detail, iterStat : ${product.productDetails}">
-			<div>
-				<label>Color:</label>
-				<select th:field="*{productDetails[__${iterStat.index}__].colorId}" name="color" onchange="toggleAddNew('color')" required>
-					<option th:each="color : ${colors}" th:value="${color.id}" th:text="${color.colorName}"></option>
-					<option value="add">Add new</option>
-				</select>
-				<div id="colorNew" style="display: none;">
-					<label>New Color Name:</label>
-					<input type="text" name="newColor" />
-				</div>
+            <!-- Trường ẩn để lưu trữ màu sắc và kích thước -->
+            <input type="hidden" id="newColors" name="newColors" />
+            <input type="hidden" id="newSizes" name="newSizes" />
 
-				<label>Size:</label>
-				<select th:field="*{productDetails[__${iterStat.index}__].sizeId}" name="size" onchange="toggleAddNew('size')" required>
-					<option th:each="size : ${sizes}" th:value="${size.id}" th:text="${size.sizeName}"></option>
-					<option value="add">Add new</option>
-				</select>
-				<div id="sizeNew" style="display: none;">
-					<label>New Size Name:</label>
-					<input type="text" name="newSize" />
-				</div>
-
-				<label>Price:</label>
-				<input type="number" th:field="*{productDetails[__${iterStat.index}__].price}" required />
-
-				<label>Quantity:</label>
-				<input type="number" th:field="*{productDetails[__${iterStat.index}__].quantity}" required />
-			</div>
-		</div>
-
-		<h3>Add Image and Description</h3>
-        <div>
-            <label>Images:</label>
-    		<input type="file" name="newImages" accept="image/*" multiple required onchange="previewImage(event)" />	
-        </div>
-        
-        <img id="imagePreview" style="display:none; width:100px; height:100px;" />
-
-        <div>
-            <label>Description:</label>
-            <textarea name="description" required></textarea>
-        </div>
-
-        <button type="submit">Add Product</button>
-    </form>
-
-    <div id="successMessage" style="display:none; color: green;">
-        Sản phẩm đã được thêm thành công!
+            <button type="submit" class="btn btn-primary">Lưu sản phẩm</button>
+        </form>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#productName').on('input', generateTable);
+            $('#colorInput').on('keypress', function (event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    addColorInput();
+                    generateTable();
+                }
+            });
+
+            $('#sizeInput').on('keypress', function (event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    addSizeInput();
+                    generateTable();
+                }
+            });
+        });
+
+        let colors = [];
+        let sizes = [];
+
+        function addColorInput() {
+            var input = $('#colorInput');
+            var colorValue = input.val().trim().toLowerCase();
+            if (colorValue !== "" && !colors.includes(colorValue)) {
+                colors.push(colorValue);
+                $('#colorList').append(`
+                    <div class="input-group">
+                        <span class="input-group-text">${input.val().trim()}</span>
+                        <span class="remove-btn" onclick="removeInput(this, 'colorList', '${colorValue}')" title="Xóa">X</span>
+                    </div>
+                `);
+                input.val("");
+            } else {
+                input.val("");
+                alert("Màu sắc đã tồn tại hoặc rỗng!");
+            }
+        }
+
+        function addSizeInput() {
+            var input = $('#sizeInput');
+            var sizeValue = input.val().trim().toLowerCase();
+            if (sizeValue !== "" && !sizes.includes(sizeValue)) {
+                sizes.push(sizeValue);
+                $('#sizeList').append(`
+                    <div class="input-group">
+                        <span class="input-group-text">${input.val().trim()}</span>
+                        <span class="remove-btn" onclick="removeInput(this, 'sizeList', '${sizeValue}')" title="Xóa">X</span>
+                    </div>
+                `);
+                input.val("");
+            } else {
+                input.val("");
+                alert("Kích thước đã tồn tại hoặc rỗng!");
+            }
+        }
+
+        function removeInput(span, listId, value) {
+            $(span).parent().remove();
+            if (listId === 'colorList') {
+                colors = colors.filter(color => color !== value);
+            } else {
+                sizes = sizes.filter(size => size !== value);
+            }
+            generateTable();
+        }
+
+        function generateTable() {
+            var tableBody = $('#productTable tbody');
+            tableBody.empty(); // Xóa dữ liệu cũ
+
+            var productName = $('#productName').val().trim();
+            if (productName === "" || colors.length === 0 || sizes.length === 0) {
+                return;
+            }
+
+            $('#newColors').val(colors.join(','));
+            $('#newSizes').val(sizes.join(','));
+
+            colors.forEach(color => {
+                sizes.forEach(size => {
+                    let price = `<input type="number" class="form-control" name="prices" required />`;
+                    let quantity = `<input type="number" class="form-control" name="quantities" required />`;
+                    let imagesInput = `<input type="file" class="form-control-file" name="newImages" onchange="previewImages(this)" multiple />`;
+                  // let imagesInput = `<input type="file" class="form-control-file" name="newImages" onchange="previewImages(this)" multiple />`;
+                    tableBody.append(`
+                        <tr>
+                            <td>${productName}</td>
+                            <td>${color}</td>
+                            <td>${size}</td>
+                            <td>${price}</td>
+                            <td>${quantity}</td>
+                            <td>
+                                ${imagesInput}
+                                <div class="image-preview-list"></div>
+                            </td>
+                            <td><button type="button" class="btn btn-danger" onclick="removeRow(this)">Xóa</button></td>
+                        </tr>
+                    `);
+                });
+            });
+        }
+
+        function previewImages(input) {
+            const imagePreviewContainer = $(input).siblings('.image-preview-list');
+            const files = input.files;
+
+            // Xóa ảnh cũ trong preview
+          //  imagePreviewContainer.empty(); 
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    imagePreviewContainer.append(`
+                        <div style="position: relative; display: inline-block;">
+                            <img src="${e.target.result}" class="image-preview" />
+                            <button type="button" class="remove-image-btn" onclick="removeImage(this)">X</button>
+                        </div>
+                    `);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removeImage(button) {
+            $(button).parent().remove(); // Xóa ảnh
+        }
+
+        function removeRow(button) {
+            $(button).closest('tr').remove();
+        }
+    </script>
 </body>
 </html>
