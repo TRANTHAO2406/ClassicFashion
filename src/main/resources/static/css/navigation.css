@@ -1,0 +1,14 @@
+.navbar-custom {
+    background-color: #000; /* Màu đen như trong hình */
+}
+.navbar-custom .nav-link, .navbar-custom .navbar-brand {
+    color: #fff;
+}
+.navbar-custom .nav-link:hover, .navbar-custom .dropdown-menu a:hover {
+    color: #f1c40f; /* Màu vàng khi hover */
+}
+.search-box input {
+    border: none;
+    padding: 6px;
+    border-radius: 0.25rem;
+}
