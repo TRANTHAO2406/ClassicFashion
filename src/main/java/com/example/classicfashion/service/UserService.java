@@ -7,6 +7,9 @@ import java.util.Optional;
 import com.example.classicfashion.model.Role;
 import com.example.classicfashion.model.UserRole;
 import com.example.classicfashion.repository.RoleRepository;
+import com.example.classicfashion.security.CustomUserDetails;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -41,7 +44,7 @@ public class UserService {
 	}
 
 	public Users findbyEmail(String email){
-		return userRepository.findByEmail(email).orElse(null);
+		return userRepository.findUserByEmail(email).orElse(null);
 	}
 
 	public void updatePassword(Users user, String newPassword){
@@ -49,6 +52,36 @@ public class UserService {
 		userRepository.save(user);
 	}
 
+	public Users getCurrentUser(){
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if(authentication != null && authentication.getPrincipal() instanceof CustomUserDetails userDetails){
+			return userDetails.getUser();
+		}
+		return null;
+	}
+
+	public List<Users> getAllUsers(){
+		return userRepository.findAll();
+	}
+
+	public Users getUserById(Long id){
+		return userRepository.findUsersById(id).orElseThrow(() -> new RuntimeException("User not found"));
+	}
+
+	public void saveUser(Users user){
+		if(user.getPassword() != null && !user.getPassword().isEmpty()){
+			user.setPassword(passwordEncoder.encode(user.getPassword()));
+		} else {
+			Users exitingUser = userRepository.findUsersById(user.getId()).orElse(null);
+			if(exitingUser != null){
+				user.setPassword(exitingUser.getPassword());
+			}
+		}
+		userRepository.save(user);
+	}
+	public Users getUserByUserName(String userName){
+		return userRepository.findUserByUserName(userName).orElse(null);
+	}
 	public Boolean doPasswordMatch(String rawPassword, String encodedPassword){
 		return passwordEcorder.matches(rawPassword, encodedPassword);
 	}

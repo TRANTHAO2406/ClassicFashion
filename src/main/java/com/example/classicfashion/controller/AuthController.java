@@ -23,25 +23,25 @@ public class AuthController {
     @GetMapping("/register")
     public String showRegisterForm(Model model){
         model.addAttribute("user", new Users());
-        return "register";
+        return "register-login/register";
     }
 
     @PostMapping("/registersuccess")
     public String register(@Valid @ModelAttribute("user") Users user, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
-            return "register";
+            return "register-login/register";
         }
         userService.registerUser(user, "USER");
         tokenService.generateAndSendToken(user);
 
-        return "register-success";
+        return "register-login/register-success";
     }
 
     @GetMapping("/verify/{token}")
     public String verify(@PathVariable String token){
         if(tokenService.validateToken(token)){
-            return "verify-success";
+            return "register-login/verify-success";
         }
-        return "verify-failure";
+        return "register-login/verify-failure";
     }
 }

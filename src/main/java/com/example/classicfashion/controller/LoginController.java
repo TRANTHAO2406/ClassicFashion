@@ -1,13 +1,8 @@
 package com.example.classicfashion.controller;
 
-import com.example.classicfashion.model.Users;
 import com.example.classicfashion.service.UserService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class LoginController {
@@ -19,7 +14,7 @@ public class LoginController {
 
     @GetMapping("/login")
     public String showLoginForm(){
-        return "login";
+        return "register-login/login";
     }
 
     public String logout(){

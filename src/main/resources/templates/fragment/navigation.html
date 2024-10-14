@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dustyman Classic</title>
+    <link rel="stylesheet" th:href="@{/css/navigation.css}">
+</head>
+<body>
+<div th:fragment="navigation">
+<nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container-fluid">
+        <!-- Dropdown menus bên trái -->
+        <div class="navbar-nav me-auto">
+            <div class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="aoNamDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Áo Nam
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="aoNamDropdown">
+                    <li><a class="dropdown-item" href="#">Áo Thun</a></li>
+                    <li><a class="dropdown-item" href="#">Áo Polo</a></li>
+                    <li><a class="dropdown-item" href="#">Sơ Mi</a></li>
+                    <li><a class="dropdown-item" href="#">Áo Khoác / Jacket</a></li>
+                </ul>
+            </div>
+            <div class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="quanNamDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Quần Nam
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="quanNamDropdown">
+                    <li><a class="dropdown-item" href="#">Quần Jeans</a></li>
+                    <li><a class="dropdown-item" href="#">Quần Shorts</a></li>
+                </ul>
+            </div>
+            <a class="nav-link" href="#">Phụ Kiện</a>
+            <a class="nav-link" href="#">Collection</a>
+            <a class="nav-link text-danger" href="#">SALE</a>
+        </div>
+
+        <!-- Logo giữa thanh nav -->
+        <a class="navbar-brand mx-auto" href="/home">DUSTYMAN <span class="text-warning">CLASSIC</span></a>
+
+        <!-- Tìm kiếm, tài khoản, giỏ hàng tách riêng -->
+        <div class="d-flex ms-auto">
+            <!-- Tìm kiếm -->
+            <div class="search-box input-group me-3">
+                <input type="text" class="form-control" placeholder="Tìm kiếm...">
+                <button class="btn btn-light"><i class="fas fa-search"></i> Tìm kiếm</button>
+            </div>
+
+            <!-- Tài khoản -->
+            <div class="account-dropdown me-3">
+                <a class="nav-link" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-user"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
+                    <li><a class="dropdown-item" href="/auth/register">Register</a></li>
+                    <li><a class="dropdown-item" href="/login">Login</a></li>
+                </ul>
+            </div>
+
+            <!-- Giỏ hàng -->
+            <div class="shopping-cart">
+                <a class="nav-link" href="#"><i class="fas fa-shopping-cart"></i></a>
+            </div>
+        </div>
+    </div>
+</nav>
+</div>
+
+
+</body>
+</html>
