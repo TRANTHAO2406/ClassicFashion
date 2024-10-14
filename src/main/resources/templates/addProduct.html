@@ -1,109 +1,114 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Thêm sản phẩm</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        .input-group {
-            margin-bottom: 10px;
-        }
+<meta charset="UTF-8">
+<title>Thêm sản phẩm</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+.input-group {
+	margin-bottom: 10px;
+}
 
-        .color-size-list {
-            margin-top: 5px;
-        }
+.color-size-list {
+	margin-top: 5px;
+}
 
-        .remove-btn {
-            color: red;
-            cursor: pointer;
-        }
+.remove-btn {
+	color: red;
+	cursor: pointer;
+}
 
-        .table td, .table th {
-            vertical-align: middle;
-        }
+.table td, .table th {
+	vertical-align: middle;
+}
 
-        .image-preview {
-            width: 50px;
-            height: 50px;
-            object-fit: cover;
-            margin-right: 5px;
-            position: relative;
-        }
+.image-preview {
+	width: 50px;
+	height: 50px;
+	object-fit: cover;
+	margin-right: 5px;
+	position: relative;
+}
 
-        .remove-image-btn {
-            position: absolute;
-            top: 0;
-            right: 0;
-            background: none;
-            border: none;
-            color: red;
-            cursor: pointer;
-            font-size: 14px;
-        }
+.remove-image-btn {
+	position: absolute;
+	top: 0;
+	right: 0;
+	background: none;
+	border: none;
+	color: red;
+	cursor: pointer;
+	font-size: 14px;
+}
 
-        input[type="file"] {
-            color: transparent;
-            margin-bottom: 1%;
-        }
-    </style>
+input[type="file"] {
+	color: transparent;
+	margin-bottom: 1%;
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <h1 class="mt-4">Thêm sản phẩm</h1>
-        <form th:action="@{/product/add}" th:object="${product}" method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="category">Danh mục:</label>
-                <select id="category" th:field="*{category}" class="form-control" required>
-                    <option value="" disabled selected>Chọn danh mục</option>
-                    <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.categoryName}"></option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="productName">Tên sản phẩm:</label>
-                <input type="text" id="productName" class="form-control" th:field="*{productName}" required />
-            </div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col">
-                        <label for="colorInput">Nhập màu sắc:</label>
-                        <input type="text" id="colorInput" class="form-control" />
-                        <div class="color-size-list" id="colorList"></div>
-                    </div>
-                    <div class="col">
-                        <label for="sizeInput">Nhập kích thước:</label>
-                        <input type="text" id="sizeInput" class="form-control" />
-                        <div class="color-size-list" id="sizeList"></div>
-                    </div>
-                </div>
-            </div>
+	<div class="container">
+		<h1 class="mt-4">Thêm sản phẩm</h1>
+		<form th:action="@{/product/add}" th:object="${product}" method="post"
+			enctype="multipart/form-data">
+			<div class="form-group">
+				<label for="category">Danh mục:</label> <select id="category"
+					th:field="*{category}" class="form-control" required>
+					<option value="" disabled selected>Chọn danh mục</option>
+					<option th:each="category : ${categories}"
+						th:value="${category.id}" th:text="${category.categoryName}"></option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="productName">Tên sản phẩm:</label> <input type="text"
+					id="productName" class="form-control" th:field="*{productName}"
+					required />
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col">
+						<label for="colorInput">Nhập màu sắc:</label> <input type="text"
+							id="colorInput" class="form-control" />
+						<div class="color-size-list" id="colorList"></div>
+					</div>
+					<div class="col">
+						<label for="sizeInput">Nhập kích thước:</label> <input type="text"
+							id="sizeInput" class="form-control" />
+						<div class="color-size-list" id="sizeList"></div>
+					</div>
+				</div>
+			</div>
 
-            <table class="table table-bordered" id="productTable">
-                <thead>
-                    <tr>
-                        <th>Tên sản phẩm</th>
-                        <th>Màu sắc</th>
-                        <th>Kích thước</th>
-                        <th>Giá</th>
-                        <th>Số lượng</th>
-                        <th>Hình ảnh</th>
-                        <th>Xóa</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Dữ liệu sẽ được thêm vào đây -->
-                </tbody>
-            </table>
+			<table class="table table-bordered" id="productTable">
+				<thead>
+					<tr>
+						<th>Tên sản phẩm</th>
+						<th>Màu sắc</th>
+						<th>Kích thước</th>
+						<th>Giá</th>
+						<th>Số lượng</th>
+						<th>Hình ảnh</th>
+						<th>Xóa</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- Dữ liệu sẽ được thêm vào đây -->
+				</tbody>
+			</table>
 
-            <!-- Trường ẩn để lưu trữ màu sắc và kích thước -->
-            <input type="hidden" id="newColors" name="newColors" />
-            <input type="hidden" id="newSizes" name="newSizes" />
+			<!-- Trường ẩn để lưu trữ màu sắc và kích thước -->
+			<input type="hidden" id="newColors" name="newColors" /> 
+			<input type="hidden" id="newSizes" name="newSizes" />
 
-            <button type="submit" class="btn btn-primary">Lưu sản phẩm</button>
-        </form>
-    </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script>
+			<button type="submit" class="btn btn-primary">Lưu sản phẩm</button>
+		</form>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script>
         $(document).ready(function () {
             $('#productName').on('input', generateTable);
             $('#colorInput').on('keypress', function (event) {
@@ -125,6 +130,7 @@
 
         let colors = [];
         let sizes = [];
+        let images=[];
 
         function addColorInput() {
             var input = $('#colorInput');
@@ -188,8 +194,8 @@
                 sizes.forEach(size => {
                     let price = `<input type="number" class="form-control" name="prices" required />`;
                     let quantity = `<input type="number" class="form-control" name="quantities" required />`;
-                    let imagesInput = `<input type="file" class="form-control-file" name="newImages" onchange="previewImages(this)" multiple />`;
-                  // let imagesInput = `<input type="file" class="form-control-file" name="newImages" onchange="previewImages(this)" multiple />`;
+               //    let imagesInput = `<input type="file" class="form-control-file" name="newImages[${productName}-${color}-${size}]" onchange="previewImages(this)" multiple />`;
+                  let imagesInput = `<input type="file" class="form-control-file" name="newImages" onchange="previewImages(this)" multiple />`;
                     tableBody.append(`
                         <tr>
                             <td>${productName}</td>
@@ -207,7 +213,7 @@
                 });
             });
         }
-
+        
         function previewImages(input) {
             const imagePreviewContainer = $(input).siblings('.image-preview-list');
             const files = input.files;

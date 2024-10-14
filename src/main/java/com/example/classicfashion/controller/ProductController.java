@@ -69,21 +69,14 @@ public class ProductController {
 
 	@PostMapping("/add")
 	public String addProduct(@ModelAttribute Product product,
-			 @RequestParam Map<String, String> params,
-			//@RequestParam Map<String, MultipartFile[]> newImages,
+//			@RequestParam Map<String, MultipartFile[]> newImages,
 			@RequestParam ("newImages")MultipartFile[] newImages,
 			@RequestParam List<String> newColors, 
 			@RequestParam List<String> newSizes,
 			@RequestParam List<BigDecimal> prices,
 			@RequestParam List<Integer> quantities,
 			@RequestParam(required = false) String newCategory) {
-		  System.out.println("Parameters: " + params);
 		System.out.println("newImages content:"+ newImages);
-//		 System.out.println("New Images: " + newImages.keySet() +"--"+ newImages.values());
-// Xử lý ảnh
-//		List<Image> savedImages = imageService.uploadImages(files);
-//		System.out.println("Số hình ảnh đã tải lên: " + savedImages.size());
-
 // Xử lý màu sắc
 		List<Color> colorList = new ArrayList<>();
 		for (String colorName : newColors) {
@@ -110,32 +103,6 @@ public class ProductController {
 		}
 		System.out.println("Số kích thước đã xử lý: " + sizeList.size());
 
-// Tạo chi tiết sản phẩm
-//		List<ProductDetail> productDetails = new ArrayList<>();
-//		int index = 0;
-//		for (Color color : colorList) {
-//			for (Size size : sizeList) {
-//				if (index >= prices.size() || index >= quantities.size()) {
-//					break; // Kiểm tra để không vượt quá kích thước của giá và số lượng
-//				}
-//				ProductDetail detail = new ProductDetail();
-//				detail.setProductId(product);
-//				detail.setColorId(color);
-//				detail.setSizeId(size);
-//				detail.setPrice(prices.get(index));
-//				detail.setQuantity(quantities.get(index));
-//
-//// Gán tất cả các ảnh cho chi tiết sản phẩm
-//				List<Image> imagesForDetail = new ArrayList<>();
-//				for (Image image : savedImages) {
-//					image.setProductDetail(detail); // Thiết lập liên kết về ProductDetail
-//					imagesForDetail.add(image);
-//				}
-//				detail.setImages(imagesForDetail); // Thiết lập danh sách ảnh cho ProductDetail
-//				productDetails.add(detail);
-//				index++;
-//			}
-//		}
 		 // Tạo chi tiết sản phẩm
 		
 	    List<ProductDetail> productDetails = new ArrayList<>();
@@ -155,15 +122,15 @@ public class ProductController {
 	            detail.setQuantity(quantities.get(index));
 
 	            // Lấy các hình ảnh cho chi tiết sản phẩm
-	            String key = product.getProductName() + "-" + color.getColorName() + "-" + size.getSizeName();
-//	            MultipartFile[] imagesForDetailFiles = newImages.get(key);
+//	            String key = product.getProductName() + "-" + color.getColorName() + "-" + size.getSizeName();
+	          //  MultipartFile[] imagesForDetailFiles = newImages.get(key);
 	            MultipartFile[] imagesForDetailFiles = newImages;
 	            if (imagesForDetailFiles != null) {
 	                List<Image> imagesForDetail = imageService.uploadImages(imagesForDetailFiles); // Lưu ảnh và nhận lại danh sách các đường dẫn
 	                for (Image image : imagesForDetail) {
-	                    image.setProductDetail(detail); // Thiết lập liên kết về ProductDetail
+	                    image.setProductDetail(detail); 
 	                }
-	                detail.setImages(imagesForDetail); // Thiết lập danh sách ảnh cho ProductDetail
+	                detail.setImages(imagesForDetail); 
 	            }
 
 	            productDetails.add(detail);
@@ -174,10 +141,6 @@ public class ProductController {
 	    product.setProductDetails(productDetails);
 	    product.setCreatedDate(LocalDate.now());
 	    product.setStatus(1);
-
-	    // Kiểm tra sản phẩm trước khi lưu
-	    System.out.println("Sản phẩm sắp lưu: " + product.getProductName());
-	    System.out.println("Số lượng chi tiết sản phẩm: " + productDetails.size());
 
 	    productService.save(product);
 	    return "redirect:/product/view";
