@@ -1,32 +1,41 @@
 package com.example.classicfashion.service;
 
-import com.example.classicfashion.model.ProductDetail;
-import com.example.classicfashion.repository.ProductDetailRepository;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.example.classicfashion.model.Color;
+import com.example.classicfashion.model.Product;
+import com.example.classicfashion.model.ProductDetail;
+import com.example.classicfashion.model.Size;
+import com.example.classicfashion.repository.ProductDetailRepository;
 
 @Service
 public class ProductDetailService {
 
-    @Autowired
-    private ProductDetailRepository productDetailRepository;
+	@Autowired
+	private ProductDetailRepository productDetailRepository;
 
-    // Lưu một ProductDetail mới
-    public ProductDetail save(ProductDetail productDetail) {
-        return productDetailRepository.save(productDetail);
-    }
+	public ProductDetail save(ProductDetail productDetail) {
+		return productDetailRepository.save(productDetail);
+	}
 
-    // Lấy tất cả ProductDetail
-    public List<ProductDetail> findAll() {
-        return productDetailRepository.findAll();
-    }
+	public List<ProductDetail> findAll() {
+		return productDetailRepository.findAll();
+	}
 
-    // Xóa một ProductDetail theo ID
-//    public void delete(Long id) {
-//        productDetailRepository.deleteById(id);
-//    }
+	public ProductDetail findByProductAndColorAndSize(Long productId, Long colorId, Long sizeId) {
+		Product product = new Product();
+		product.setId(productId);
 
-    // Thêm các phương thức khác tùy theo nhu cầu của bạn
+		Color color = new Color();
+		color.setId(colorId);
+
+		Size size = new Size();
+		size.setId(sizeId);
+
+		return productDetailRepository.findByProductIdAndColorIdAndSizeId(product, color, size);
+	}
+
 }

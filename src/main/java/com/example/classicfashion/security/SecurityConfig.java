@@ -16,53 +16,41 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+	@Autowired
+	private CustomUserDetailsService customUserDetailsService;
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return customUserDetailsService;
-    }
+	@Bean
+	public UserDetailsService userDetailsService() {
+		return customUserDetailsService;
+	}
 
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService());
-        provider.setPasswordEncoder(passwordEncoder()); // Use an appropriate encoder
-        return provider;
-    }
+	@Bean
+	public AuthenticationProvider authenticationProvider() {
+		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+		provider.setUserDetailsService(userDetailsService());
+		provider.setPasswordEncoder(passwordEncoder()); // Use an appropriate encoder
+		return provider;
+	}
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(authorize -> authorize
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		http.csrf(csrf -> csrf.disable()).authorizeHttpRequests(authorize -> authorize
 
-                        .requestMatchers("/auth/**", "/login/**","/product/**", "/forgot-password/**", "/css/**", "/uploads/**","/img/**").permitAll()  // Không cần xác thực
-                        .requestMatchers("/admin/**").hasRole("ADMIN")  // Chỉ admin mới được truy cập
-                        .anyRequest().authenticated()  // Mọi yêu cầu khác phải đăng nhập
-                   
-                )
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .loginProcessingUrl("/login")
-                        .usernameParameter("username")
-                        .passwordParameter("password")
-                        .defaultSuccessUrl("/home", true)
-                        .failureUrl("/login?error=true")
-                        .permitAll()
-                )
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/home")
-                        .permitAll()
-                );
-        return http.build();
-    }
+				.requestMatchers("/auth/**", "/login/**", "/product/**", "/forgot-password/**", "/css/**",
+						"/uploads/**", "/img/**", "/shopping-cart/**")
+				.permitAll() // Không cần xác thực
+				.requestMatchers("/admin/**").hasRole("ADMIN") // Chỉ admin mới được truy cập
+				.anyRequest().authenticated() // Mọi yêu cầu khác phải đăng nhập
+
+		).formLogin(form -> form.loginPage("/login").loginProcessingUrl("/login").usernameParameter("username")
+				.passwordParameter("password").defaultSuccessUrl("/home", true).failureUrl("/login?error=true")
+				.permitAll()).logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/home").permitAll());
+		return http.build();
+	}
 
 }
