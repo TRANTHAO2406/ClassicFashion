@@ -25,7 +25,7 @@ public class PasswordController {
 
     @GetMapping("/forgot-password-form")
     public String showForgotPasswordFrom(){
-        return "forgot-password";
+        return "register-login/forgot-password";
     }
 
     @PostMapping("/forgot-password-form")
@@ -33,22 +33,22 @@ public class PasswordController {
         Users user = userService.findbyEmail(email);
         if(user == null){
             model.addAttribute("error", "Email không tồn tại!");
-            return "forgot-password";
+            return "register-login/forgot-password";
         }
 
         tokenService.generatePasswordResetToken(user);
         model.addAttribute("message", "Hãy kiểm tra email của bạn để đặt lại mật khẩu!");
-        return "forgot-password";
+        return "register-login/forgot-password";
     }
 
     @GetMapping("/reset-password/{token}")
     public String showResetPasswordForm(@PathVariable String token, Model model){
         if(!tokenService.validatePasswordResetToken(token)){
             model.addAttribute("error", "Token không hợp lệ hoặc đã hết hạn!");
-            return "reset-password";
+            return "register-login/reset-password";
         }
         model.addAttribute("token", token);
-        return "reset-password";
+        return "register-login/reset-password";
     }
 
     @PostMapping("/reset-password")
@@ -56,7 +56,7 @@ public class PasswordController {
                                        @RequestParam("password") String newPassword, Model model){
         if(!tokenService.validatePasswordResetToken(token)){
             model.addAttribute("error", "Token không hợp ệ hoặc đã hết hạn!");
-            return "reset-password";
+            return "register-login/reset-password";
         }
         PasswordResetToken foundToken = passwordResetTokenRepository.findPasswordResetTokenByToken(token).orElse(null);
         assert foundToken != null;
@@ -65,6 +65,6 @@ public class PasswordController {
 
         tokenService.markPasswordResetTokenAsUsed(token); //mark used token
         model.addAttribute("message", "Mật khẩu đã được đặt lại thành công!");
-        return "reset-password-success";
+        return "register-login/reset-password-success";
     }
 }

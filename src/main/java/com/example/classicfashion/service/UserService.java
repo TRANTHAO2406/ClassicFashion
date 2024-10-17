@@ -69,16 +69,30 @@ public class UserService {
 	}
 
 	public void saveUser(Users user){
-		if(user.getPassword() != null && !user.getPassword().isEmpty()){
-			user.setPassword(passwordEncoder.encode(user.getPassword()));
-		} else {
+		if(user.getId() != null){
 			Users exitingUser = userRepository.findUsersById(user.getId()).orElse(null);
+
 			if(exitingUser != null){
-				user.setPassword(exitingUser.getPassword());
+				user.setCreatedDate(exitingUser.getCreatedDate());
+				user.setStatus(exitingUser.getStatus());
+
+				if(user.getPassword() == null ||user.getPassword().isEmpty()){
+					user.setPassword(exitingUser.getPassword());
+				} else {
+					user.setPassword(passwordEncoder.encode(user.getPassword()));
+				}
 			}
+		} else {
+			user.setCreatedDate(LocalDate.now());
 		}
+		user.setUpdatedDate(LocalDate.now());
 		userRepository.save(user);
 	}
+
+	public void deleteUserById(Long id){
+		userRepository.deleteById(id);
+	}
+
 	public Users getUserByUserName(String userName){
 		return userRepository.findUserByUserName(userName).orElse(null);
 	}

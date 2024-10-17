@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Danh sách người dùng</title>
+</head>
+<body>
+<h2>Danh sách người dùng</h2>
+
+<!-- Link để thêm người dùng mới -->
+<a href="/users/new">Thêm người dùng mới</a>
+
+<!-- Hiển thị danh sách người dùng -->
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Tên người dùng</th>
+        <th>Email</th>
+        <th>Số điện thoại</th>
+        <th>Địa chỉ</th>
+        <th>Hành động</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Lặp qua danh sách người dùng và hiển thị thông tin -->
+    <tr th:each="user : ${user}">
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.userName}"></td>
+        <td th:text="${user.email}"></td>
+        <td th:text="${user.phone}"></td>
+        <td th:text="${user.address}"></td>
+        <td>
+            <!-- Link chỉnh sửa người dùng -->
+            <a th:href="@{/admin/user/edit/{id}(id=${user.id})}">Chỉnh sửa</a>
+            <!-- Link xóa người dùng -->
+            <a th:href="@{/admin/user/delete/{id}(id=${user.id})}"
+               onclick="return confirm('Bạn có chắc chắn muốn xóa người dùng này?')">Xóa</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
