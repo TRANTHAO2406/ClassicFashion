@@ -43,8 +43,10 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
 
-                        .requestMatchers("/auth/**", "/login/**","/product/**", "/forgot-password/**", "/css/**", "/uploads/**","/img/**", "/javascript/**").permitAll()  // Không cần xác thực
-                        .requestMatchers("/admin/**").hasRole("ADMIN")  // Chỉ admin mới được truy cập
+                        .requestMatchers("/auth/**", "/login/**","/product/**", "/forgot-password/**",  
+                                         "/uploads/**", "/shopping-cart/**",
+                                         "/css/**", "/javascript/**","/img/**").permitAll()  
+                        .requestMatchers("/admin/**").hasRole("ADMIN")  // for admin role
                         .anyRequest().authenticated()  // Mọi yêu cầu khác phải đăng nhập
                    
                 )

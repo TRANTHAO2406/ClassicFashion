@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Danh sách sản phẩm</title>
-    <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
     <div class="container mt-5">
@@ -32,38 +31,87 @@
                         <ul class="list-unstyled">
                             <li th:each="detail : ${product.productDetails}">
                                 <ul>
-                                    <li th:each="image : ${detail.images}" th:if="${image != null}">
-                                        <img th:src="@{${image.imgLink}}" alt="Product Image" class="img-fluid" width="100" height="100" />
+                                    <li th:if="${#lists.isEmpty(detail.images)}">
+                                        <p>Không có hình ảnh</p>
+                                    </li>
+                                    <li th:if="${!#lists.isEmpty(detail.images)}">
+                                        <img th:src="@{${detail.images[0].imgLink}}" alt="Product Image" class="img-fluid" width="100" height="100" />
                                     </li>
                                 </ul>
                             </li>
                         </ul>
                     </td>
                     <td>
-                        <ul class="list-unstyled">
-                            <li th:each="size : ${#sets.toSet(product.productDetails.![sizeId.sizeName])}">
-                                <span th:text="${size}"></span>
-                            </li>
-                        </ul>
+                        <select name="size" class="form-control" id="sizeSelect-${product.id}">
+                            <option th:each="size : ${#sets.toSet(product.productDetails.![sizeId.sizeName])}" 
+                                    th:value="${size}" 
+                                    th:text="${size}"></option>
+                        </select>
                     </td>
                     <td>
-                        <ul class="list-unstyled">
-                            <li th:each="color : ${#sets.toSet(product.productDetails.![colorId.colorName])}">
-                                <span th:text="${color}"></span>
-                            </li>
-                        </ul>
+                        <select name="color" class="form-control" id="colorSelect-${product.id}">
+                            <option th:each="color : ${#sets.toSet(product.productDetails.![colorId.colorName])}" 
+                                    th:value="${color}" 
+                                    th:text="${color}"></option>
+                        </select>
                     </td>
                     <td th:text="${product.createdDate}"></td>
                     <td th:text="${product.updatedDate}"></td>
                     <td>
-                        <a th:href="@{/product/update/{id}(id=${product.id})}" class="btn btn-warning">Cập nhật</a>
-                        <a th:href="@{/product/delete/{id}(id=${product.id})}" class="btn btn-danger">Xóa</a>
+                       
+
+                        <!-- Nút Buy Now -->
+                        <form th:action="@{/shopping-cart/add}" method="post" class="form-inline">
+                            <input type="hidden" name="productId" th:value="${product.id}" />
+                            <select name="size" class="form-control">
+                                <option th:each="size : ${#sets.toSet(product.productDetails.![sizeId.sizeName])}" 
+                                        th:value="${size}" 
+                                        th:text="${size}"></option>
+                            </select>
+                            <select name="color" class="form-control">
+                                <option th:each="color : ${#sets.toSet(product.productDetails.![colorId.colorName])}" 
+                                        th:value="${color}" 
+                                        th:text="${color}"></option>
+                            </select>
+                            <input type="number" name="quantity" class="form-control" value="1" min="1" style="width: 70px; display: inline;" />
+                            <button type="submit" name="action" th:value="add" class="btn btn-danger btn-lg btn-block add-to-cart">Thêm vào giỏ hàng</button>
+							<button type="submit" name="action" th:value="buy" class="btn btn-success btn-lg btn-block buy-now" value="buyNow">Mua ngay</button>
+                        </form>
+                        <a th:href="@{/product/update/{id}(id=${product.id})}" class="btn btn-warning btn-sm">Cập nhật</a>
+                        <a th:href="@{/product/delete/{id}(id=${product.id})}" class="btn btn-danger btn-sm" 
+                           onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">Xóa</a>
                     </td>
                 </tr>
             </tbody>
         </table>
         <a href="/product/add" class="btn btn-primary">Thêm sản phẩm mới</a>
     </div>
+
+    <script>
+        function addToCart(event, element) {
+            event.preventDefault();  // Ngăn hành động mặc định (chuyển trang)
+
+            let productId = element.getAttribute('data-product-id');
+            let size = document.getElementById('sizeSelect-' + productId).value;
+            let color = document.getElementById('colorSelect-' + productId).value;
+            let quantity = 1; // Hoặc có thể lấy từ input số lượng nếu cần
+
+            let url = '/shopping-cart/add?productId=' + productId + '&size=' + size + '&color=' + color + '&quantity=' + quantity;
+
+            // Gửi yêu cầu thêm sản phẩm vào giỏ hàng mà không chuyển trang
+            fetch(url, {
+                method: 'POST'
+            }).then(response => {
+                if (response.ok) {
+                    alert("Sản phẩm đã được thêm vào giỏ hàng thành công!");
+                } else {
+                    alert("Thêm vào giỏ hàng thất bại.");
+                }
+            }).catch(error => {
+                console.error("Error:", error);
+            });
+        }
+    </script>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>

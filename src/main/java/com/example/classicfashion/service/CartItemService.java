@@ -8,28 +8,37 @@ import org.springframework.stereotype.Service;
 
 import com.example.classicfashion.model.CartItem;
 
-
 @Service
 public class CartItemService {
 
-	Map<Long, CartItem> maps = new HashMap<>();
+	Map<String, CartItem> maps = new HashMap<>();
+
+	private String createKey(Long productId, String color, String size) {
+		return productId + "_" + color + "_" + size;
+	}
 
 	public void add(CartItem item) {
-		CartItem cartItem = maps.get(item.getProductID());
+		String key = createKey(item.getProductID(), item.getColor(), item.getSize());
+		CartItem cartItem = maps.get(key);
+
 		if (cartItem == null) {
-			maps.put(item.getProductID(), item);
+			maps.put(key, item);
 		} else {
-			cartItem.setQuantity(cartItem.getQuantity() + 1);
+			cartItem.setQuantity(cartItem.getQuantity() + item.getQuantity());
 		}
 	}
 
-	public void remove(long id) {
-		maps.remove(id);
+	public void remove(Long productId, String color, String size) {
+		String key = createKey(productId, color, size);
+		maps.remove(key);
 	}
 
-	public CartItem update(long productID, int qty) {
-		CartItem cartItem = maps.get(productID);
-		cartItem.setQuantity(qty);
+	public CartItem update(Long productId, String color, String size, int qty) {
+		String key = createKey(productId, color, size);
+		CartItem cartItem = maps.get(key);
+		if (cartItem != null) {
+			cartItem.setQuantity(qty);
+		}
 		return cartItem;
 	}
 
@@ -38,10 +47,11 @@ public class CartItemService {
 	}
 
 	public int getCount() {
-		return maps.values().size();
+		return maps.size();
 	}
 
 	public double getAmount() {
 		return maps.values().stream().mapToDouble(item -> item.getQuantity() * item.getPrice()).sum();
 	}
+
 }

@@ -9,12 +9,13 @@ public class CartItem {
 	private String color;
 	private String size;
 	private int quantity = 1;
+	private boolean isSelected;
 
 	public CartItem() {
 	}
 
 	public CartItem(Long productID, String name, double price, String imgLink, String color, String size,
-			int quantity) {
+			int quantity,boolean isSelected) {
 		this.productID = productID;
 		this.name = name;
 		this.price = price;
@@ -22,6 +23,7 @@ public class CartItem {
 		this.color = color;
 		this.size = size;
 		this.quantity = quantity;
+		this.isSelected = isSelected;
 	}
   
 	public Long getProductID() {
@@ -79,5 +81,14 @@ public class CartItem {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
+
+	public boolean isSelected() {
+		return isSelected;
+	}
+
+	public void setSelected(boolean isSelected) {
+		this.isSelected = isSelected;
+	}
+	
 
 }

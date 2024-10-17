@@ -1,157 +1,195 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Giỏ hàng</title>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        h1 {
+            margin-bottom: 20px; 
+        }
+        .table {
+            margin-top: 20px;
+        }
+        .total {
+            font-weight: bold;
+        }
+        .btn-remove {
+            background-color: #dc3545;
+            color: white;
+        }
+        .btn-remove:hover {
+            background-color: #c82333;
+        }
+        .quantity-btn {
+            width: 30px; /* Set fixed width for buttons */
+            height: 30px; /* Set fixed height for buttons */
+        }
+    </style>
 </head>
 <body>
-	<div class="container">
-		<h2 style="color: red">Giỏ hàng</h2>
-		<div class="alert alert-info">
-			<strong>Số sản phẩm đã chọn: <span id="selected-count">0</span></strong>
-		</div>
-		<div class="rows">
-			<div class="col-sm-9">
-				<table class="table">
-					<thead>
-						<tr style="background: aqua">
-							<th><input type="checkbox" id="selectAll"> Chọn tất cả</th>
-							<th>Hình ảnh</th>
-							<th>Tên</th>
-							<th>Giá</th>
-							<th>Số lượng</th>
-							<th>Thành tiền</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr th:each="item : ${cartItems}">
-							<td><input type="checkbox" class="product-checkbox"
-								th:attr="data-id=${item.productID}" ></td>
-							<td><img th:src="@{/img/vay.jpg}" width="50" height="50" /></td>
-							<td th:text="${item.name}"></td>
-							<td th:text="${item.price}" th:attr="data-price=${item.price}"></td>
-							<td>
-								<form th:action="@{/shopping-cart/update}" method="post" style="display: inline;">
-									<input type="hidden" name="id" th:value="${item.productID}" />
-									<input type="hidden" name="qty" th:value="${item.qty - 1}" />
-									<button type="submit" class="btn btn-danger btn-sm">-</button>
-								</form> <input type="number" name="qty" th:value="${item.qty}"
-								th:attr="data-id=${item.productID}"
-								style="width: 50px; text-align: center;" min="1" readonly>
-								<form th:action="@{/shopping-cart/update}" method="post" style="display: inline;">
-									<input type="hidden" name="id" th:value="${item.productID}" />
-									<input type="hidden" name="qty" th:value="${item.qty + 1}" />
-									<button type="submit" class="btn btn-success btn-sm">+</button>
-								</form>
+    <div class="container">
+        <h1 class="text-center">Your Cart</h1>
+        
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>
+                        <input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)" /> <!-- Checkbox Select All -->
+                    </th>
+                    <th>Product</th>
+                    <th>Image</th>
+                    <th>Color</th>
+                    <th>Size</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item : ${cart}">
+                    <td>
+                        <input type="checkbox" class="item-checkbox" th:value="${item.productID}" th:checked="${item.isSelected}" />
+                    </td>
+                    <td th:text="${item.name}"></td>
+                    <td>
+                        <img th:src="${item.imgLink}" alt="Product Image" style="width: 50px; height: 50px;" />
+                    </td>
+                    <td th:text="${item.color}"></td>
+                    <td th:text="${item.size}"></td>
+                    <td>
+                        <form th:action="@{/shopping-cart/update}" method="post" style="display: inline;">
+                            <input type="hidden" name="productId" th:value="${item.productID}" />
+                            <input type="hidden" name="color" th:value="${item.color}" />
+                            <input type="hidden" name="size" th:value="${item.size}" />
+                            <button type="button" class="btn btn-outline-secondary quantity-btn" onclick="updateQuantity(this, -1)">-</button>
+                            <input type="number" name="quantity" th:value="${item.quantity}" min="1" style="width: 70px;" readonly />
+                            <button type="button" class="btn btn-outline-secondary quantity-btn" onclick="updateQuantity(this, 1)">+</button>
+                        </form>
+                    </td>
+                    <td th:text="${item.price}"></td>
+                    <td th:text="${item.quantity * item.price}" class="product-total"></td> <!-- Class added for easy access -->
+                    <td>
+                        <a th:href="@{/shopping-cart/remove(productId=${item.productID}, colorId=${item.color}, sizeId=${item.size})}" class="btn btn-remove" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này???')">Remove</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-							</td>
-							<td class="item-total" th:text="${item.price * item.qty}" th:attr="data-total=${item.price * item.qty}"></td>
-							<td><a class="btn btn-sm btn-danger"
-								th:href="@{/shopping-cart/delete/{id}(id=${item.productID})}">Xoá</a>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				<p>
-					Tổng tiền: <span id="cart-total">0</span>
-				</p>
-				<hr />
-				<a class="btn btn-primary btn-sm" href="#">Thanh toán</a>
-			</div>
-		</div>
-	</div>
+        <div class="total">
+            <h2>Total Amount: <span id="totalAmount">0.00</span></h2>
+        </div>
 
-	<script th:inline="javascript">
-	$(document).ready(function () {
-	    loadCheckboxState();
+        <div class="text-center">
+            <form th:action="@{/checkout}" method="post">
+                <button type="submit" class="btn btn-success">Checkout</button>
+            </form>
+            <a href="/checkout" class="btn btn-success">Checkout All</a>
+        </div>
+    </div>
 
-	    $('#selectAll').click(
-	        function () {
-	            var checked = $(this).prop('checked');
-	            $('.product-checkbox').prop('checked',
-	                checked);
-	            updateSelectedCount();
-	            updateCartTotal();
-	            saveCheckboxState();
-	        });
+    <!-- Bootstrap JS and dependencies (optional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-	    $('.product-checkbox')
-	        .click(
-	            function () {
-	                $('#selectAll')
-	                    .prop(
-	                        'checked',
-	                        $('.product-checkbox:checked').length === $('.product-checkbox').length);
-	                updateSelectedCount();
-	                updateCartTotal();
-	                saveCheckboxState();
-	            });
+    <script>
+    $(document).ready(function() {
+        // Function to update total items and amount
+        function updateTotal() {
+            let totalItems = 0;
+            let totalAmount = 0;
+            let allSelected = true; // Flag to check if all checkboxes are selected
 
-	    updateSelectedCount();
-	    updateCartTotal();
-	});
+            // Loop through each checkbox for products only
+            $('.item-checkbox').each(function() {
+                if ($(this).is(':checked')) { // Only consider checked checkboxes
+                    const row = $(this).closest('tr');
+                    const quantity = parseInt(row.find('input[type="number"]').val());
+                    const price = parseFloat(row.find('td:eq(6)').text().replace(/[^0-9.-]+/g,"")); // Xóa ký tự không phải số
 
-		function loadCheckboxState() {
-			var savedState = JSON.parse(localStorage
-					.getItem('cartCheckboxState'))
-					|| {};
-			$('.product-checkbox').each(function() {
-				var productId = $(this).data('id');
-				if (savedState[productId]) {
-					$(this).prop('checked', true);
-				}
-			});
-			updateSelectedCount();
-			updateCartTotal();
-		}
+                    totalItems += quantity;
+                    totalAmount += quantity * price;
+                } else {
+                    allSelected = false; // If any checkbox is not selected, set flag to false
+                }
+            });
 
-		function saveCheckboxState() {
-			var state = {};
-			$('.product-checkbox').each(function() {
-				var productId = $(this).data('id');
-				state[productId] = $(this).prop('checked');
-			});
-			localStorage.setItem('cartCheckboxState', JSON.stringify(state));
-		}
+            // Update total items and amount
+            $('#totalItems').text(totalItems);
+            $('#totalAmount').text(totalAmount.toFixed(2));
 
-		function updateSelectedCount() {
-			$('#selected-count').text($('.product-checkbox:checked').length);
-		}
+            // Update the Select All checkbox state
+            $('#selectAll').prop('checked', allSelected);
+        }
 
-		function changeQuantity(button, change) {
-			var input = $(button).siblings('input[type=number]');
-			var currentQty = parseInt(input.val());
-			var newQty = currentQty + change;
-			if (newQty >= 1) {
-				input.val(newQty);
-				updateItem(input);
-			}
-		}
+        function updateQuantity(button, change) {
+            const row = $(button).closest('tr');
+            const quantityInput = row.find('input[name="quantity"]');
+            const price = parseFloat(row.find('td:eq(6)').text().replace(/[^0-9.-]+/g, "")); // Get the price from the price column
+            let quantity = parseInt(quantityInput.val());
 
-		function updateItem(input) {
-			var productId = $(input).data('id');
-			var newQuantity = $(input).val();
-			var price = parseFloat($(input).closest('tr').find('[data-price]')
-					.text());
-		}
+            quantity += change;
 
-		function updateCartTotal() {
-			var total = 0;
-			$('.product-checkbox:checked').each(
-					function() {
-						var itemTotal = parseFloat($(this).closest('tr').find(
-								'.item-total').attr('data-total'));
-						total += itemTotal;
-					});
-			$('#cart-total').text(total.toFixed(2));
-		}
-	</script>
+            if (quantity <= 0) {
+                if (confirm("Bạn có muốn xóa sản phẩm này không?")) {
+                    const productId = row.find('input[type="checkbox"]').val();
+                    const color = row.find('input[name="color"]').val();
+                    const size = row.find('input[name="size"]').val();
+
+                    // Sửa lại URL xóa sản phẩm
+                    const removeUrl = `/shopping-cart/remove?productId=${productId}&colorId=${color}&sizeId=${size}`;
+                    console.log("URL Xoá sản phẩm:", removeUrl);
+                    window.location.href = removeUrl; // Điều hướng tới URL xóa sản phẩm
+                } else {
+                    quantity = 1; // Reset quantity to 1 if not confirmed
+                }
+            } else if (quantity < 1) {
+                quantity = 1; // Ensure quantity does not go below 1
+            }
+
+            quantityInput.val(quantity);
+
+            // Calculate new total for this product
+            const total = quantity * price;
+            row.find('.product-total').text(total.toFixed(2)); // Update total price in the table
+
+            // Update total immediately after changing quantity
+            updateTotal();
+        }
+
+        // Function to toggle Select All
+        function toggleSelectAll(selectAllCheckbox) {
+            const isChecked = $(selectAllCheckbox).is(':checked');
+            $('.item-checkbox').prop('checked', isChecked);
+            updateTotal(); // Update totals when Select All is changed
+        }
+
+        // Listen for the change event on the checkboxes
+        $('.item-checkbox').on('change', updateTotal);
+
+        // Event listener for Select All checkbox
+        $('#selectAll').on('click', function() {
+            toggleSelectAll(this);
+        });
+
+        // Event listener for quantity buttons
+        $('.quantity-btn').on('click', function() {
+            const change = $(this).text() === '+' ? 1 : -1;
+            updateQuantity(this, change);
+        });
+
+        // Update totals on page load
+        updateTotal();
+    });
+
+    </script>
 </body>
 </html>
