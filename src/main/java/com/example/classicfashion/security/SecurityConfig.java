@@ -43,11 +43,11 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
 
-                        .requestMatchers("/auth/**", "/login/**","/product/**", "/forgot-password/**",  
-                                         "/uploads/**", "/shopping-cart/**",
+                        .requestMatchers( "/auth/**", "/login/**","/product/**", "/forgot-password/**",
+                                         "/uploads/**", "/shopping-cart/**", "/user/**",
                                          "/css/**", "/javascript/**","/img/**").permitAll()  
                         .requestMatchers("/admin/**").hasRole("ADMIN")  // for admin role
-                        .anyRequest().authenticated()  // Mọi yêu cầu khác phải đăng nhập
+                        .anyRequest().authenticated()
                    
                 )
                 .formLogin(form -> form
@@ -62,6 +62,8 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/home")
+                        .invalidateHttpSession(true) //remove session
+                        .clearAuthentication(true)  //remove user's information
                         .permitAll()
                 );
         return http.build();

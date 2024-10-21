@@ -20,11 +20,7 @@ public class HomeController {
     @GetMapping
     public String showHomePage(Model model){
         Users currentUser = userService.getCurrentUser();
-        if(currentUser !=null){
-            model.addAttribute("userName", currentUser.getUserName());
-        } else{
-            model.addAttribute("userName", "Khách");
-        }
+        model.addAttribute("user", currentUser);
         return "home";
     }
 }

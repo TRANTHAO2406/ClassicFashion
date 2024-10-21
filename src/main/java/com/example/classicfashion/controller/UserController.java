@@ -8,7 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/admin/user")
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
@@ -26,18 +26,9 @@ public class UserController {
 
     @PostMapping("/save")
     public String saveUser(@ModelAttribute("user") Users user){
+        System.out.println(user.toString());
         userService.saveUser(user);
-        return "redirect:/admin/user";
+        return "redirect:/user/edit/" + user.getId();
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteUser(@PathVariable Long id){
-        userService.deleteUserById(id);
-        return "redirect:/user";
-    }
-    @GetMapping
-    public String showUserList(Model model){
-        model.addAttribute("user", userService.getAllUsers());
-        return "user/user-list";
-    }
 }

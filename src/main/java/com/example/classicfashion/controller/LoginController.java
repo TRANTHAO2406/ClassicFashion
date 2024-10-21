@@ -17,7 +17,4 @@ public class LoginController {
         return "register-login/login";
     }
 
-    public String logout(){
-        return "redirect:/home";
-    }
 }

@@ -70,7 +70,7 @@ public class UserService {
 
 	public void saveUser(Users user){
 		if(user.getId() != null){
-			Users exitingUser = userRepository.findUsersById(user.getId()).orElse(null);
+			Users exitingUser = userRepository.findUserByEmail(user.getEmail()).orElse(null);
 
 			if(exitingUser != null){
 				user.setCreatedDate(exitingUser.getCreatedDate());
