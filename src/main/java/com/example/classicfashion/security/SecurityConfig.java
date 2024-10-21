@@ -42,7 +42,7 @@ public class SecurityConfig {
 		http.csrf(csrf -> csrf.disable()).authorizeHttpRequests(authorize -> authorize
 
 				.requestMatchers("/auth/**", "/login/**", "/product/**", "/forgot-password/**", "/css/**",
-						"/uploads/**", "/img/**", "/shopping-cart/**")
+						"/uploads/**", "/img/**", "/shopping-cart/**","/checkout/**")
 				.permitAll() // Không cần xác thực
 				.requestMatchers("/admin/**").hasRole("ADMIN") // Chỉ admin mới được truy cập
 				.anyRequest().authenticated() // Mọi yêu cầu khác phải đăng nhập
