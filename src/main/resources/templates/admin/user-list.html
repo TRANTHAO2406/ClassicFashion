@@ -31,9 +31,9 @@
         <td th:text="${user.address}"></td>
         <td>
             <!-- Link chỉnh sửa người dùng -->
-            <a th:href="@{/admin/user/edit/{id}(id=${user.id})}">Chỉnh sửa</a>
+            <a th:href="@{/admin/edit/{id}(id=${user.id})}">Chỉnh sửa</a>
             <!-- Link xóa người dùng -->
-            <a th:href="@{/admin/user/delete/{id}(id=${user.id})}"
+            <a th:href="@{/admin/delete-user/{id}(id=${user.id})}"
                onclick="return confirm('Bạn có chắc chắn muốn xóa người dùng này?')">Xóa</a>
         </td>
     </tr>

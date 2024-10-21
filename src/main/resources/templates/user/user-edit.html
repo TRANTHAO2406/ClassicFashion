@@ -1,34 +1,166 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chỉnh sửa thông tin người dùng</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+        .edit-user-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #333;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+        h2 {
+            color: #f1c40f;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            color: #fff;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            vertical-align: middle;
+        }
+        th {
+            background-color: #444;
+        }
+        td {
+            background-color: #222;
+        }
+        .form-control {
+            background-color: #222;
+            color: #fff;
+            border: 1px solid #444;
+        }
+        .form-control:focus {
+            background-color: #222;
+            color: #fff;
+            border-color: #f1c40f;
+            box-shadow: none;
+        }
+        .btn-submit {
+            background-color: #f1c40f;
+            color: #000;
+            border: none;
+        }
+        .btn-submit:hover {
+            background-color: #e2ac0a;
+        }
+        .btn-cancel {
+            background-color: #444;
+            color: #fff;
+            border: none;
+            margin-left: 10px;
+        }
+        .btn-cancel:hover {
+            background-color: #666;
+        }
+        .edit-icon {
+            color: #f1c40f;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .input-container {
+            display: none; /* Ẩn input mặc định */
+        }
+        .input-container.active {
+            display: block; /* Hiển thị khi nhấn nút sửa */
+        }
+    </style>
 </head>
 <body>
-<h2>Chỉnh sửa thông tin người dùng</h2>
-<form th:action="@{/admin/user/save}" th:object="${user}" method="post">
-    <input type="hidden" th:field="*{id}" />
-    <div>
-        <label>Tên người dùng:</label>
-        <input type="text" th:field="*{userName}" required />
-    </div>
-    <div>
-        <label>Email:</label>
-        <input type="email" th:field="*{email}" required readonly />  <!-- Email không được sửa -->
-    </div>
-    <div>
-        <label>Số điện thoại:</label>
-        <input type="text" th:field="*{phone}" required />
-    </div>
-    <div>
-        <label>Địa chỉ:</label>
-        <input type="text" th:field="*{address}" required />
-    </div>
-    <div>
-        <label>Mật khẩu mới (nếu muốn thay đổi):</label>
-        <input type="password" th:field="*{password}" placeholder="Để trống nếu không muốn đổi mật khẩu" />
-    </div>
-    <button type="submit">Cập nhật</button>
-    <a href="/admin/users">Hủy</a>  <!-- Link quay lại trang danh sách người dùng -->
-</form>
+
+<div class="edit-user-container">
+    <h2>Chỉnh sửa thông tin người dùng</h2>
+
+    <form th:action="@{/user/save}" th:object="${user}" method="post">
+        <input type="hidden" th:field="*{id}" />
+
+        <!-- Bảng hiển thị thông tin người dùng -->
+        <table>
+            <tr>
+                <th>Tên người dùng</th>
+                <td>
+                    <span th:text="${user.userName}">Nguyễn Văn A</span>
+                    <i class="fas fa-edit edit-icon" onclick="toggleInput('userNameInput')"></i>
+                    <!-- Thẻ input ẩn, xuất hiện khi nhấn nút sửa -->
+                    <div id="userNameInput" class="input-container mt-2">
+                        <input type="text" class="form-control" th:field="*{userName}" />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>
+                    <span th:text="${user.email}">email@example.com</span>
+                    <input type="hidden" th:field="*{email}" />
+                    <!-- Không cho phép sửa email -->
+                </td>
+            </tr>
+            <tr>
+                <th>Số điện thoại</th>
+                <td>
+                    <span th:text="${user.phone}">0123456789</span>
+                    <i class="fas fa-edit edit-icon" onclick="toggleInput('phoneInput')"></i>
+                    <div id="phoneInput" class="input-container mt-2">
+                        <input type="text" class="form-control" th:field="*{phone}" />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>Địa chỉ</th>
+                <td>
+                    <span th:text="${user.address}">Hà Nội, Việt Nam</span>
+                    <i class="fas fa-edit edit-icon" onclick="toggleInput('addressInput')"></i>
+                    <div id="addressInput" class="input-container mt-2">
+                        <input type="text" class="form-control" th:field="*{address}" />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>Mật khẩu mới</th>
+                <td>
+                    <span>Để trống nếu không muốn thay đổi</span>
+                    <i class="fas fa-edit edit-icon" onclick="toggleInput('passwordInput')"></i>
+                    <div id="passwordInput" class="input-container mt-2">
+                        <input type="password" class="form-control" th:field="*{password}" placeholder="Nhập mật khẩu mới" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <!-- Nút submit -->
+        <div class="mt-4 text-center">
+            <button type="submit" class="btn btn-submit">Cập nhật</button>
+            <a href="/home" class="btn btn-cancel">Hủy</a> <!-- Link quay lại -->
+        </div>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Hàm ẩn/hiện input khi nhấn vào icon sửa
+    function toggleInput(inputId) {
+        const inputContainer = document.getElementById(inputId);
+        if (inputContainer.classList.contains('active')) {
+            inputContainer.classList.remove('active'); // Ẩn input nếu đang hiển thị
+        } else {
+            inputContainer.classList.add('active'); // Hiển thị input nếu đang ẩn
+        }
+    }
+</script>
 </body>
 </html>

@@ -42,26 +42,30 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-
-				.requestMatchers("/auth/**", "/login/**", "/product/**", "/forgot-password/**", "/css/**",
-						"/uploads/**", "/img/**", "/shopping-cart/**","/checkout/**")
-				.permitAll() // Không cần xác thực
-				.requestMatchers("/admin/**").hasRole("ADMIN") // Chỉ admin mới được truy cập
-				.anyRequest().authenticated() // Mọi yêu cầu khác phải đăng nhập
-
-		).formLogin(form -> form.loginPage("/login")
-				.loginProcessingUrl("/login")
-				.usernameParameter("username")
-				.passwordParameter("password")
-				.defaultSuccessUrl("/home", true).
-				failureUrl("/login?error=true")
-				.permitAll()
-				)
-                .logout(logout -> logout.logoutUrl("/logout")
-						.logoutSuccessUrl("/home").
-						permitAll());
-		return http.build();
-	}
-
+                        .requestMatchers( "/auth/**", "/login/**","/product/**", "/forgot-password/**",
+                                         "/uploads/**", "/shopping-cart/**", "/checkout/**", "/user/**",
+                                         "/css/**", "/javascript/**","/img/**").permitAll()  
+                        .requestMatchers("/admin/**").hasRole("ADMIN")  // for admin role
+                        .anyRequest().authenticated()
+                   
+                )
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .usernameParameter("username")
+                        .passwordParameter("password")
+                        .defaultSuccessUrl("/home", true)
+                        .failureUrl("/login?error=true")
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/home")
+                        .invalidateHttpSession(true) //remove session
+                        .clearAuthentication(true)  //remove user's information
+                        .permitAll()
+                );
+        return http.build();
+    }
 
 }
