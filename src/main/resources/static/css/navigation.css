@@ -7,8 +7,21 @@
 .navbar-custom .nav-link:hover, .navbar-custom .dropdown-menu a:hover {
     color: #f1c40f; /* Màu vàng khi hover */
 }
+.dropdown-menu {
+    background-color: #000; /* Màu đen cho dropdown */
+    border-color: #333; /* Viền cho dropdown */
+}
+.dropdown-item {
+    color: #fff; /* Màu trắng cho chữ trong dropdown */
+}
+.dropdown-item:hover {
+    background-color: #333; /* Màu khi hover trong dropdown */
+}
 .search-box input {
     border: none;
     padding: 6px;
     border-radius: 0.25rem;
+}
+.btn-search {
+    margin-left: 10px;
 }

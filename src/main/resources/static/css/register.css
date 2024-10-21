@@ -1,0 +1,68 @@
+body {
+    background-color: #fff;
+    color: #fff;
+    font-family: Arial, sans-serif;
+}
+.register-container {
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 20px;
+    background-color: #333;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    position: relative;
+}
+.register-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #f1c40f;
+}
+.form-control {
+    background-color: #222; /* color of input */
+    color: #fff;
+    border: 1px solid #444; /* dark border */
+}
+/* focus input */
+.form-control:focus {
+    background-color: #222;
+    color: #fff;
+    border-color: #f1c40f;
+    box-shadow: none;
+}
+.btn-register {
+    background-color: #f1c40f;
+    color: #000;
+    border: none;
+}
+.btn-register:hover {
+    background-color: #e2ac0a;
+}
+.links {
+    text-align: center;
+    margin-top: 15px;
+}
+/* link */
+.links a {
+    color: #f1c40f;
+    text-decoration: none;
+}
+.links a:hover {
+    text-decoration: underline;
+}
+/* checkbox */
+.show-password {
+    margin-top: 10px;
+    color: #ccc;
+}
+/* house icon */
+.home-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    color: #f1c40f;
+}
+/* CSS for error */
+.invalid-feedback {
+    color: #f44336;
+}

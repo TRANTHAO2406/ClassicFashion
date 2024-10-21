@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Chỉnh sửa thông tin người dùng</title>
+</head>
+<body>
+<h2>Chỉnh sửa thông tin người dùng</h2>
+<form th:action="@{/admin/user/save}" th:object="${user}" method="post">
+    <input type="hidden" th:field="*{id}" />
+    <div>
+        <label>Tên người dùng:</label>
+        <input type="text" th:field="*{userName}" required />
+    </div>
+    <div>
+        <label>Email:</label>
+        <input type="email" th:field="*{email}" required readonly />  <!-- Email không được sửa -->
+    </div>
+    <div>
+        <label>Số điện thoại:</label>
+        <input type="text" th:field="*{phone}" required />
+    </div>
+    <div>
+        <label>Địa chỉ:</label>
+        <input type="text" th:field="*{address}" required />
+    </div>
+    <div>
+        <label>Mật khẩu mới (nếu muốn thay đổi):</label>
+        <input type="password" th:field="*{password}" placeholder="Để trống nếu không muốn đổi mật khẩu" />
+    </div>
+    <button type="submit">Cập nhật</button>
+    <a href="/admin/users">Hủy</a>  <!-- Link quay lại trang danh sách người dùng -->
+</form>
+</body>
+</html>
