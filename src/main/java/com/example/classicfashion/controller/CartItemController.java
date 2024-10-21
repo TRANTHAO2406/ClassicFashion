@@ -139,6 +139,7 @@ public class CartItemController {
 	    // Tạo một đối tượng Order mới
 	    Order order = new Order();
 	    
+	    
 	    // Lấy thông tin người dùng từ session (nếu có)
 	    Users currentUser = (Users) session.getAttribute("user");
 	    if (currentUser != null) {
