@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .order-details {
+            margin-top: 20px;
+        }
+        .total {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Order Confirmation</h1>
+
+        <div class="alert alert-success" th:if="${message}">
+            <p th:text="${message}"></p>
+        </div>
+
+        <h2>Order Summary</h2>
+      <!--   <div class="order-details">
+            <h4>Shipping Information</h4>
+            <p><strong>Full Name:</strong> <span th:text="${order.fullName}"></span></p>
+            <p><strong>Email:</strong> <span th:text="${order.email}"></span></p>
+            <p><strong>Phone:</strong> <span th:text="${order.phone}"></span></p>
+            <p><strong>Address:</strong> <span th:text="${order.address}"></span></p>
+            <p><strong>City:</strong> <span th:text="${order.city}"></span></p>
+            <p><strong>Postal Code:</strong> <span th:text="${order.postalCode}"></span></p>
+        </div> -->
+
+        <h4>Ordered Products</h4>
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Product</th>
+                    <th>Color</th>
+                    <th>Size</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody th:each="item : ${orderDetails}">
+                <tr>
+                    <td th:text="${item.product.productName}"></td>
+                    <td th:text="${item.color}"></td>
+                    <td th:text="${item.size}"></td>
+                    <td th:text="${item.quantity}"></td>
+                    <td th:text="${item.price}"></td>
+                    <td th:text="${item.subTotal}"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="total">
+            <h3>Total Amount: <span th:text="${order.totalPrice}"></span></h3>
+        </div>
+
+        <div class="text-center">
+            <a href="/" class="btn btn-primary">Continue Shopping</a>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (optional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
