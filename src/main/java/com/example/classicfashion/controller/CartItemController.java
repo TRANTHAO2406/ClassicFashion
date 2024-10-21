@@ -144,7 +144,7 @@ public class CartItemController {
 	    Users currentUser = (Users) session.getAttribute("user");
 	    if (currentUser != null) {
 	        order.setUser(currentUser);
-//	    }
+	    }
 
 	    // Set các thuộc tính cơ bản cho Order
 	    order.setOrderDate(LocalDate.now());
@@ -182,7 +182,6 @@ public class CartItemController {
 	    // Thêm thông tin vào Model để hiển thị trong trang xác nhận
 	    model.addAttribute("message", "Your order has been placed successfully!");
 	    model.addAttribute("order", order);
-	    }
 	    // Điều hướng tới trang xác nhận đơn hàng
 	    return "order-confirmation";
 	    
