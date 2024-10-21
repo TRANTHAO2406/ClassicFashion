@@ -12,7 +12,7 @@
             background-color: #f8f9fa;
         }
         h1 {
-            margin-bottom: 20px; 
+            margin-bottom: 20px;
         }
         .table {
             margin-top: 20px;
@@ -28,71 +28,67 @@
             background-color: #c82333;
         }
         .quantity-btn {
-            width: 30px; /* Set fixed width for buttons */
-            height: 30px; /* Set fixed height for buttons */
+            width: 30px;
+            height: 30px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1 class="text-center">Your Cart</h1>
-        
-        <table class="table table-bordered table-striped">
-            <thead class="thead-dark">
-                <tr>
-                    <th>
-                        <input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)" /> <!-- Checkbox Select All -->
-                    </th>
-                    <th>Product</th>
-                    <th>Image</th>
-                    <th>Color</th>
-                    <th>Size</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                    <th>Total</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="item : ${cart}">
-                    <td>
-                        <input type="checkbox" class="item-checkbox" th:value="${item.productID}" th:checked="${item.isSelected}" />
-                    </td>
-                    <td th:text="${item.name}"></td>
-                    <td>
-                        <img th:src="${item.imgLink}" alt="Product Image" style="width: 50px; height: 50px;" />
-                    </td>
-                    <td th:text="${item.color}"></td>
-                    <td th:text="${item.size}"></td>
-                    <td>
-                        <form th:action="@{/shopping-cart/update}" method="post" style="display: inline;">
-                            <input type="hidden" name="productId" th:value="${item.productID}" />
-                            <input type="hidden" name="color" th:value="${item.color}" />
+        <form th:action="@{/shopping-cart/checkout}" method="post">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)" /></th>
+                        <th>Product</th>
+                        <th>Image</th>
+                        <th>Color</th>
+                        <th>Size</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="item : ${cart}">
+                        <td>
+                            <input type="checkbox" class="item-checkbox" th:value="${item.productID}" th:checked="${item.isSelected}" />
+                        </td>
+                        <td th:text="${item.name}"></td>
+                        <td>
+                            <img th:src="${item.imgLink}" alt="Product Image" style="width: 50px; height: 50px;" />
+                        </td>
+                        <td th:text="${item.color}"></td>
+                        <td th:text="${item.size}"></td>
+                        <td>
+                            <input type="hidden" name="productId" th:value="${item.productID}" /> 
+                            <input type="hidden" name="color" th:value="${item.color}" /> 
                             <input type="hidden" name="size" th:value="${item.size}" />
-                            <button type="button" class="btn btn-outline-secondary quantity-btn" onclick="updateQuantity(this, -1)">-</button>
+                            <button type="button" class="btn btn-outline-secondary quantity-btn" onclick="updateQuantity(this, -1)">-</button> 
                             <input type="number" name="quantity" th:value="${item.quantity}" min="1" style="width: 70px;" readonly />
                             <button type="button" class="btn btn-outline-secondary quantity-btn" onclick="updateQuantity(this, 1)">+</button>
-                        </form>
-                    </td>
-                    <td th:text="${item.price}"></td>
-                    <td th:text="${item.quantity * item.price}" class="product-total"></td> <!-- Class added for easy access -->
-                    <td>
-                        <a th:href="@{/shopping-cart/remove(productId=${item.productID}, colorId=${item.color}, sizeId=${item.size})}" class="btn btn-remove" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này???')">Remove</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                        </td>
+                        <td th:text="${item.price}"></td>
+                        <td th:text="${item.quantity * item.price}" class="product-total"></td>
+                        <td>
+                            <a th:href="@{/shopping-cart/remove(productId=${item.productID}, colorId=${item.color}, sizeId=${item.size})}" class="btn btn-remove" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')">Remove</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
-        <div class="total">
-            <h2>Total Amount: <span id="totalAmount">0.00</span></h2>
-        </div>
-
-        <div class="text-center">
-            <form th:action="@{/checkout}" method="post">
+            <div class="total">
+                <h2>
+                    Total Amount: <span id="totalAmount">0.00</span>
+                </h2>
+            </div>
+            <input type="hidden" name="cartItems" id="cart-items">
+            <div class="text-center">
                 <button type="submit" class="btn btn-success">Checkout</button>
-            </form>
-            <a href="/checkout" class="btn btn-success">Checkout All</a>
-        </div>
+            </div>
+        </form>
     </div>
 
     <!-- Bootstrap JS and dependencies (optional) -->
@@ -101,95 +97,80 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
-    $(document).ready(function() {
-        // Function to update total items and amount
-        function updateTotal() {
-            let totalItems = 0;
-            let totalAmount = 0;
-            let allSelected = true; // Flag to check if all checkboxes are selected
+        $(document).ready(function() {
+            function updateTotal() {
+                let totalItems = 0;
+                let totalAmount = 0;
+                let allSelected = true;
 
-            // Loop through each checkbox for products only
-            $('.item-checkbox').each(function() {
-                if ($(this).is(':checked')) { // Only consider checked checkboxes
-                    const row = $(this).closest('tr');
-                    const quantity = parseInt(row.find('input[type="number"]').val());
-                    const price = parseFloat(row.find('td:eq(6)').text().replace(/[^0-9.-]+/g,"")); // Xóa ký tự không phải số
+                $('.item-checkbox').each(function() {
+                    if ($(this).is(':checked')) {
+                        const row = $(this).closest('tr');
+                        const quantity = parseInt(row.find('input[name="quantity"]').val());
+                        const price = parseFloat(row.find('td:eq(6)').text().replace(/[^0-9.-]+/g,""));
 
-                    totalItems += quantity;
-                    totalAmount += quantity * price;
-                } else {
-                    allSelected = false; // If any checkbox is not selected, set flag to false
-                }
-            });
+                        totalItems += quantity;
+                        totalAmount += quantity * price;
+                    } else {
+                        allSelected = false;
+                    }
+                });
 
-            // Update total items and amount
-            $('#totalItems').text(totalItems);
-            $('#totalAmount').text(totalAmount.toFixed(2));
-
-            // Update the Select All checkbox state
-            $('#selectAll').prop('checked', allSelected);
-        }
-
-        function updateQuantity(button, change) {
-            const row = $(button).closest('tr');
-            const quantityInput = row.find('input[name="quantity"]');
-            const price = parseFloat(row.find('td:eq(6)').text().replace(/[^0-9.-]+/g, "")); // Get the price from the price column
-            let quantity = parseInt(quantityInput.val());
-
-            quantity += change;
-
-            if (quantity <= 0) {
-                if (confirm("Bạn có muốn xóa sản phẩm này không?")) {
-                    const productId = row.find('input[type="checkbox"]').val();
-                    const color = row.find('input[name="color"]').val();
-                    const size = row.find('input[name="size"]').val();
-
-                    // Sửa lại URL xóa sản phẩm
-                    const removeUrl = `/shopping-cart/remove?productId=${productId}&colorId=${color}&sizeId=${size}`;
-                    console.log("URL Xoá sản phẩm:", removeUrl);
-                    window.location.href = removeUrl; // Điều hướng tới URL xóa sản phẩm
-                } else {
-                    quantity = 1; // Reset quantity to 1 if not confirmed
-                }
-            } else if (quantity < 1) {
-                quantity = 1; // Ensure quantity does not go below 1
+                $('#totalAmount').text(totalAmount.toFixed(2));
+                $('#selectAll').prop('checked', allSelected);
+                updateCartItemsField();
             }
 
-            quantityInput.val(quantity);
+            function updateCartItemsField() {
+                const cart = [];
+                $('.item-checkbox').each(function() {
+                    const row = $(this).closest('tr');
+                    if ($(this).is(':checked')) {
+                        const item = {
+                            productID: $(this).val(),
+                            name: row.find('td:eq(1)').text(),
+                            imgLink: row.find('img').attr('src'),
+                            color: row.find('td:eq(3)').text(),
+                            size: row.find('td:eq(4)').text(),
+                            quantity: row.find('input[name="quantity"]').val(),
+                            price: row.find('td:eq(6)').text(),
+                            isSelected: $(this).is(':checked')
+                        };
+                        cart.push(item);
+                    }
+                });
+                $('#cart-items').val(JSON.stringify(cart));
+            }
 
-            // Calculate new total for this product
-            const total = quantity * price;
-            row.find('.product-total').text(total.toFixed(2)); // Update total price in the table
+            function updateQuantity(button, change) {
+                const row = $(button).closest('tr');
+                const quantityInput = row.find('input[name="quantity"]');
+                let quantity = parseInt(quantityInput.val()) + change;
 
-            // Update total immediately after changing quantity
+                if (quantity < 1) {
+                    quantity = 1;
+                }
+
+                quantityInput.val(quantity);
+                const price = parseFloat(row.find('td:eq(6)').text().replace(/[^0-9.-]+/g, ""));
+                const total = quantity * price;
+                row.find('.product-total').text(total.toFixed(2));
+                updateTotal();
+            }
+
+            $('.item-checkbox').on('change', updateTotal);
+            $('#selectAll').on('click', function() {
+                $('.item-checkbox').prop('checked', this.checked);
+                updateTotal();
+            });
+
+            $('.quantity-btn').on('click', function() {
+                const change = $(this).text() === '+' ? 1 : -1;
+                updateQuantity(this, change);
+            });
+
             updateTotal();
-        }
-
-        // Function to toggle Select All
-        function toggleSelectAll(selectAllCheckbox) {
-            const isChecked = $(selectAllCheckbox).is(':checked');
-            $('.item-checkbox').prop('checked', isChecked);
-            updateTotal(); // Update totals when Select All is changed
-        }
-
-        // Listen for the change event on the checkboxes
-        $('.item-checkbox').on('change', updateTotal);
-
-        // Event listener for Select All checkbox
-        $('#selectAll').on('click', function() {
-            toggleSelectAll(this);
         });
-
-        // Event listener for quantity buttons
-        $('.quantity-btn').on('click', function() {
-            const change = $(this).text() === '+' ? 1 : -1;
-            updateQuantity(this, change);
-        });
-
-        // Update totals on page load
-        updateTotal();
-    });
-
     </script>
 </body>
 </html>

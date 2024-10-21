@@ -1,7 +1,9 @@
 package com.example.classicfashion.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
@@ -52,6 +54,16 @@ public class CartItemService {
 
 	public double getAmount() {
 		return maps.values().stream().mapToDouble(item -> item.getQuantity() * item.getPrice()).sum();
+	}
+
+	public void removeSelectedItems(Collection<CartItem> cartItems) {
+	    List<CartItem> itemsToRemove = new ArrayList<>();
+	    for (CartItem cartItem : cartItems) {
+	        if (cartItem.getIsSelected()) { // Kiểm tra sản phẩm có được chọn không
+	            itemsToRemove.add(cartItem);
+	        }
+	    }
+	    cartItems.removeAll(itemsToRemove); // Xóa các sản phẩm đã chọn khỏi giỏ hàng
 	}
 
 }

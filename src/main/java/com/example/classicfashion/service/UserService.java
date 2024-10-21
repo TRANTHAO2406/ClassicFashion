@@ -22,49 +22,52 @@ public class UserService {
 	private final UserRepository userRepository;
 	private final RoleRepository roleRepository;
 	private final PasswordEncoder passwordEncoder;
+
 	public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;
 		this.roleRepository = roleRepository;
 		this.passwordEncoder = passwordEncoder;
 	}
-	private static final BCryptPasswordEncoder passwordEcorder = new BCryptPasswordEncoder();
-	public void registerUser(Users user, String role){
-		System.out.println("Mật khẩu trước mã hóa" + user.getPassword());
-		user.setPassword(passwordEncoder.encode(user.getPassword()));	//Encrypt password before saving
-		System.out.println("Mật khẩu sau mã hóa" + user.getPassword());
-		user.setCreatedDate(LocalDate.now());	//set createdDate
-		user.setStatus("PENDING");	//set status
 
-		Users savedUser = userRepository.save(user);	//Save user to database
-		//Find role by name and assign to user
+	private static final BCryptPasswordEncoder passwordEcorder = new BCryptPasswordEncoder();
+
+	public void registerUser(Users user, String role) {
+		System.out.println("Mật khẩu trước mã hóa" + user.getPassword());
+		user.setPassword(passwordEncoder.encode(user.getPassword())); // Encrypt password before saving
+		System.out.println("Mật khẩu sau mã hóa" + user.getPassword());
+		user.setCreatedDate(LocalDate.now()); // set createdDate
+		user.setStatus("PENDING"); // set status
+
+		Users savedUser = userRepository.save(user); // Save user to database
+		// Find role by name and assign to user
 		Role userRole = roleRepository.findByRole(role).orElseThrow(() -> new RuntimeException("Role not found!!"));
 
 		UserRole userRoleModel = new UserRole(savedUser, userRole);
 		savedUser.getUserRoles().add(userRoleModel);
 	}
 
-	public Users findbyEmail(String email){
+	public Users findbyEmail(String email) {
 		return userRepository.findUserByEmail(email).orElse(null);
 	}
 
-	public void updatePassword(Users user, String newPassword){
+	public void updatePassword(Users user, String newPassword) {
 		user.setPassword(passwordEncoder.encode(newPassword));
 		userRepository.save(user);
 	}
 
-	public Users getCurrentUser(){
+	public Users getCurrentUser() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if(authentication != null && authentication.getPrincipal() instanceof CustomUserDetails userDetails){
+		if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails userDetails) {
 			return userDetails.getUser();
 		}
 		return null;
 	}
 
-	public List<Users> getAllUsers(){
+	public List<Users> getAllUsers() {
 		return userRepository.findAll();
 	}
 
-	public Users getUserById(Long id){
+	public Users getUserById(Long id) {
 		return userRepository.findUsersById(id).orElseThrow(() -> new RuntimeException("User not found"));
 	}
 
@@ -72,11 +75,11 @@ public class UserService {
 		if(user.getId() != null){
 			Users exitingUser = userRepository.findUserByEmail(user.getEmail()).orElse(null);
 
-			if(exitingUser != null){
+			if (exitingUser != null) {
 				user.setCreatedDate(exitingUser.getCreatedDate());
 				user.setStatus(exitingUser.getStatus());
 
-				if(user.getPassword() == null ||user.getPassword().isEmpty()){
+				if (user.getPassword() == null || user.getPassword().isEmpty()) {
 					user.setPassword(exitingUser.getPassword());
 				} else {
 					user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -89,14 +92,15 @@ public class UserService {
 		userRepository.save(user);
 	}
 
-	public void deleteUserById(Long id){
+	public void deleteUserById(Long id) {
 		userRepository.deleteById(id);
 	}
 
-	public Users getUserByUserName(String userName){
+	public Users getUserByUserName(String userName) {
 		return userRepository.findUserByUserName(userName).orElse(null);
 	}
-	public Boolean doPasswordMatch(String rawPassword, String encodedPassword){
+
+	public Boolean doPasswordMatch(String rawPassword, String encodedPassword) {
 		return passwordEcorder.matches(rawPassword, encodedPassword);
 	}
 }

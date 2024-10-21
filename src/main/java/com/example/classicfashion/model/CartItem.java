@@ -82,11 +82,11 @@ public class CartItem {
 		this.quantity = quantity;
 	}
 
-	public boolean isSelected() {
+	public boolean getIsSelected() {
 		return isSelected;
 	}
 
-	public void setSelected(boolean isSelected) {
+	public void setIsSelected(boolean isSelected) {
 		this.isSelected = isSelected;
 	}
 	
