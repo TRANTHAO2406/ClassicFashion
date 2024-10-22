@@ -1,0 +1,27 @@
+.sidebar {
+    background-color: #000;
+    height: 100vh;
+    color: #fff;
+    padding-top: 20px;
+}
+.sidebar .nav-link {
+    color: #fff;
+    font-size: 16px;
+}
+.sidebar .nav-link.active {
+    background-color: #000;
+    color: #fff;
+}
+.sidebar .nav-link:hover {
+    background-color: #e2ac0a;
+}
+.sidebar .submenu {
+    background-color: #000;
+    padding-left: 30px;
+}
+.sidebar .submenu a {
+    font-size: 14px;
+}
+.sidebar .submenu .nav-link:hover {
+    background-color: #e2ac0a;
+}

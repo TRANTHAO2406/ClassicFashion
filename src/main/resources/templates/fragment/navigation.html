@@ -59,6 +59,7 @@
                         <!-- Hiển thị thông tin người dùng khi đã đăng nhập -->
                         <!-- Tên người dùng -->
                         <li><a class="dropdown-item" th:href="@{/user/edit/{id}(id=${user.id})}" th:text="${user.userName}">UserName</a></li>
+                        <li th:if="${isAdmin}"><a class="dropdown-item" href="/admin">Trang quản trị</a></li>
                         <!-- Lịch sử mua hàng -->
                         <li><a class="dropdown-item" href="#">Lịch sử mua hàng</a></li>
                         <!-- Đăng xuất -->

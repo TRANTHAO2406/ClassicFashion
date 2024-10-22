@@ -61,7 +61,7 @@ public class ProductController {
 		ProductDetail defaultDetail = new ProductDetail();
 		product.setProductDetails(new ArrayList<>(List.of(defaultDetail)));
 		model.addAttribute("product", product);
-		model.addAttribute("categories", categoryService.findAll());
+		model.addAttribute("categories", categoryService.getAllCategory());
 		model.addAttribute("colors", colorService.findAll());
 		model.addAttribute("sizes", sizeService.findAll());
 		return "addProduct";

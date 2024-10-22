@@ -1,0 +1,27 @@
+body {
+    background-color: #f8f9fa; /* Màu nền trắng sáng */
+    color: #000; /* Màu chữ đen */
+    font-family: Arial, sans-serif;
+}
+.main-content {
+    margin-left: 220px;
+    padding: 20px;
+}
+.table th, .table td {
+    color: #000;
+    background-color: #fff; /* Nền bảng màu trắng */
+}
+.table th {
+    background-color: #e9ecef;
+}
+.btn-add-product {
+    background-color: #f1c40f;
+    color: #000;
+    border: none;
+}
+.btn-add-product:hover {
+    background-color: #e2ac0a;
+}
+.form-control {
+    max-width: 400px;
+}
