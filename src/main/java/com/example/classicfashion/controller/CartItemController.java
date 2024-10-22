@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,29 +36,32 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/shopping-cart")
 public class CartItemController {
 
-	@Autowired
 	private CartItemService cartItemService;
-
-	@Autowired
 	private ProductDetailService productDetailService;
-
-	@Autowired
 	private ColorService colorService;
-	@Autowired
 	private SizeService sizeService;
-
-	@Autowired
 	private OrderService orderService;
-	@Autowired
 	private OrderDetailService orderDetailService;
-	@Autowired
 	private ProductService productService;
-
-	@Autowired
 	private UserService userService;
-	
+
+	public CartItemController(CartItemService cartItemService, ProductDetailService productDetailService,
+			ColorService colorService, SizeService sizeService, OrderService orderService,
+			OrderDetailService orderDetailService, ProductService productService,UserService userService) {
+		this.cartItemService = cartItemService;
+		this.productDetailService = productDetailService;
+		this.colorService = colorService;
+		this.sizeService = sizeService;
+		this.orderService = orderService;
+		this.orderDetailService = orderDetailService;
+		this.productService = productService;
+		this.userService = userService;
+	}
+
 	@GetMapping("/view")
 	public String viewCart(Model model, HttpSession session) {
+		Users currentUser = userService.getCurrentUser();
+        model.addAttribute("user", currentUser);
 		Collection<CartItem> cartItems = cartItemService.getAllItems();
 		model.addAttribute("cart", cartItems);
 
@@ -72,12 +74,13 @@ public class CartItemController {
 
 		return "cart-item";
 	}
+
 	// add product from cart
 	@PostMapping("/add")
 	public String addToCart(@RequestParam Long productId,
-							@RequestParam String color,
+							@RequestParam String color, 
 							@RequestParam String size,
-							@RequestParam int quantity, 
+							@RequestParam int quantity,
 							@RequestParam String action, 
 							HttpSession session, Model model) {
 		Color colorID = colorService.findByName(color);
@@ -104,13 +107,11 @@ public class CartItemController {
 		return "buy".equals(action) ? "redirect:/shopping-cart/view" : "redirect:/product/view";
 	}
 
-	
-
 	// Remove product
 	@GetMapping("/remove")
 	public String removeFromCart(@RequestParam Long productId,
 								@RequestParam String colorId,
-								@RequestParam String sizeId,
+								@RequestParam String sizeId, 
 								Model model) {
 
 		cartItemService.remove(productId, colorId, sizeId);
@@ -121,83 +122,66 @@ public class CartItemController {
 		return "redirect:/shopping-cart/view";
 	}
 
-	@PostMapping("/checkout")
-	public String processCheckout(@RequestParam String cartItems, 
-								  Model model, HttpSession session) {
-
-	    // Parse JSON từ chuỗi cartItems sang đối tượng Collection<CartItem>
-		System.out.println("cartItemsJson: " + cartItems);
+	@PostMapping("/submit")
+	public String processCheckout(@RequestParam String cartItems, Model model, HttpSession session) {
 		
-	    Collection<CartItem> cartItemsList = parseCartItems(cartItems);
+		Collection<CartItem> cartItemsList = parseCartItems(cartItems);
+		if (cartItemsList.isEmpty()) {
+			model.addAttribute("message", "Your cart is empty!");
+			return "redirect:/shopping-cart/view";
+		}
 
-	    // Nếu giỏ hàng trống, chuyển hướng lại trang giỏ hàng
-	    if (cartItemsList.isEmpty()) {
-	        model.addAttribute("message", "Your cart is empty!");
-	        return "redirect:/shopping-cart/view"; 
-	    }
+		Order order = new Order();
 
-	    // Tạo một đối tượng Order mới
-	    Order order = new Order();
-	    
-	    
-	    // Lấy thông tin người dùng từ session (nếu có)
-	    Users currentUser = (Users) session.getAttribute("user");
-	    if (currentUser != null) {
-	        order.setUser(currentUser);
-	    }
+		Users currentUser = userService.getCurrentUser();
+		if (currentUser != null) {
+			order.setUser(currentUser);
+		}
+		order.setOrderDate(LocalDate.now());
+		order.setShippingPrice(5.0);
+		double totalAmount = 0.0;
 
-	    // Set các thuộc tính cơ bản cho Order
-	    order.setOrderDate(LocalDate.now());
-	    order.setShippingPrice(5.0); // Phí vận chuyển cố định, bạn có thể thay đổi logic này
-	    double totalAmount = 0.0;
+		order.setStatus("Pending");
+		order.setUpdatedDate(LocalDate.now());
+		order.setTotalPrice(totalAmount + order.getShippingPrice());
+		orderService.save(order);
+		for (CartItem cartItem : cartItemsList) {
+			if (cartItem.getIsSelected()) {
+				OrderDetail orderDetail = new OrderDetail();
+				orderDetail.setOrder(order);
+				orderDetail.setProduct(productService.findById(cartItem.getProductID()));
+				orderDetail.setQuantity(cartItem.getQuantity());
+				orderDetail.setPrice(cartItem.getPrice());
+				orderDetail.setSubTotal(cartItem.getQuantity() * cartItem.getPrice());
 
-	    // Duyệt qua danh sách CartItem và thêm vào OrderDetail
-	    for (CartItem cartItem : cartItemsList) {
-	        if (cartItem.getIsSelected()) { // Kiểm tra xem sản phẩm có được chọn không
-	            OrderDetail orderDetail = new OrderDetail();
-	            orderDetail.setOrder(order);
-	            orderDetail.setProduct(productService.findById(cartItem.getProductID())); // Tìm sản phẩm từ productService
-	            orderDetail.setQuantity(cartItem.getQuantity());
-	            orderDetail.setSubTotal(cartItem.getQuantity() * cartItem.getPrice());
+				orderDetailService.save(orderDetail);
 
-	            // Lưu OrderDetail vào CSDL
-	            orderDetailService.save(orderDetail);
+				totalAmount += orderDetail.getSubTotal();
+			}
+		}
 
-	            // Cộng tổng giá trị của sản phẩm đã chọn
-	            totalAmount += orderDetail.getSubTotal();
-	        }
-	    }
+		order.setTotalPrice(totalAmount + order.getShippingPrice());
+		orderService.save(order);
 
-	    // Set tổng giá trị đơn hàng và lưu Order
-	    order.setTotalPrice(totalAmount + order.getShippingPrice());
-	    order.setStatus("Pending"); // Trạng thái đơn hàng có thể thay đổi tùy theo yêu cầu
-	    order.setUpdatedDate(LocalDate.now());
+		cartItemService.removeSelectedItems(cartItemsList);
 
-	    // Lưu Order vào CSDL
-	    orderService.save(order);
+		model.addAttribute("message", "Your order has been placed successfully!");
+		model.addAttribute("order", order);
+		System.out.println(order.toString());
+		return "redirect:/checkout";
 
-	    // Xóa các sản phẩm đã chọn khỏi giỏ hàng
-	    cartItemService.removeSelectedItems(cartItemsList);
-
-	    // Thêm thông tin vào Model để hiển thị trong trang xác nhận
-	    model.addAttribute("message", "Your order has been placed successfully!");
-	    model.addAttribute("order", order);
-	    // Điều hướng tới trang xác nhận đơn hàng
-	    return "order-confirmation";
-	    
 	}
 
-	// Phương thức để parse chuỗi JSON sang Collection<CartItem>
 	private Collection<CartItem> parseCartItems(String cartItemsJson) {
-	    ObjectMapper objectMapper = new ObjectMapper();
-	    Collection<CartItem> cartItems = new ArrayList<>();
-	    try {
-	        // Chuyển chuỗi JSON thành Collection<CartItem>
-	        cartItems = objectMapper.readValue(cartItemsJson, new TypeReference<Collection<CartItem>>() {});
-	    } catch (IOException e) {
-	        e.printStackTrace(); // Log lỗi nếu có
-	    }
-	    return cartItems;
+		ObjectMapper objectMapper = new ObjectMapper();
+		Collection<CartItem> cartItems = new ArrayList<>();
+		try {
+			cartItems = objectMapper.readValue(cartItemsJson, new TypeReference<Collection<CartItem>>() {
+			});
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return cartItems;
 	}
 
 }

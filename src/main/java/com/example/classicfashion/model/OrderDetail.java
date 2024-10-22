@@ -30,14 +30,18 @@ public class OrderDetail {
 
 	@Column(name = "subTotal", nullable = false)
 	private Double subTotal;
+	
+	@Column(name = "price", nullable = false)
+	private Double price;
 
-	public OrderDetail(Long id, Order order, Product product, Integer quantity, Double subTotal) {
+	public OrderDetail(Long id, Order order, Product product, Integer quantity, Double subTotal,Double price) {
 		super();
 		this.id = id;
 		this.order = order;
 		this.product = product;
 		this.quantity = quantity;
 		this.subTotal = subTotal;
+		this.price = price;
 	}
 
 	public OrderDetail() {
@@ -82,6 +86,14 @@ public class OrderDetail {
 
 	public void setSubTotal(Double subTotal) {
 		this.subTotal = subTotal;
+	}
+
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
 	}
 
 }

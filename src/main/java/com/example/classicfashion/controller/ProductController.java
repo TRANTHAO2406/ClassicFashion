@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,11 +21,13 @@ import com.example.classicfashion.model.Image;
 import com.example.classicfashion.model.Product;
 import com.example.classicfashion.model.ProductDetail;
 import com.example.classicfashion.model.Size;
+import com.example.classicfashion.model.Users;
 import com.example.classicfashion.service.CategoryService;
 import com.example.classicfashion.service.ColorService;
 import com.example.classicfashion.service.ImageService;
 import com.example.classicfashion.service.ProductService;
 import com.example.classicfashion.service.SizeService;
+import com.example.classicfashion.service.UserService;
 
 @Controller
 @RequestMapping("/product")
