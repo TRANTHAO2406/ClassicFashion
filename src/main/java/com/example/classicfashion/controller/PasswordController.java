@@ -35,7 +35,7 @@ public class PasswordController {
 
 	@PostMapping("/forgot-password-form")
 	public String processForgotPassword(@RequestParam String email, Model model) {
-		Users user = userService.findbyEmail(email);
+		Users user = userService.getUserbyEmail(email);
 		if (user == null) {
 			model.addAttribute("error", "Email không tồn tại!");
 			return "register-login/forgot-password";

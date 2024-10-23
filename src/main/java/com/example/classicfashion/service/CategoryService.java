@@ -16,21 +16,16 @@ public class CategoryService {
 		this.categoryRepository = categoryRepository;
 	}
 
-	public void save(Category category) {
+	public void saveCategory(Category category) {
 		categoryRepository.save(category);
 	}
 
-	public void deleteById(Long Id) {
-		categoryRepository.deleteById(Id);
-	}
-
-	public List<Category> findAll() {
+	public List<Category> getAllCategory(){
 		return categoryRepository.findAll();
 	}
 
-	public Category findById(Long Id) {
-		return categoryRepository.findById(Id)
-				.orElseThrow(() -> new IllegalArgumentException("Khong tim thay category"));
+	public Category getCategoryById(Long id){
+		return categoryRepository.findCategoryById(id).orElseThrow(() -> new RuntimeException ("Category is not found!"));
 	}
 
 }

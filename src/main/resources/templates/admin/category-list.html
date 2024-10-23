@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách danh mục</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/category-list.css}">
+    <link rel="stylesheet" th:href="@{/css/navi-admin.css}">
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2">
+            <div th:replace="~{/fragment/navi-admin :: sidebar}"></div>
+        </div>
+
+        <!-- Phần danh sách sản phẩm -->
+        <div class="col-md-10 bg-light">
+            <h4>Tất cả danh mục</h4>
+            <div class="d-flex justify-content-between align-items-center my-3">
+
+                <input type="text" class="form-control w-50" placeholder="Tìm kiếm danh mục">
+
+                <a href="#" class="btn btn-warning text-white">+ Thêm danh mục</a>
+            </div>
+
+            <table class="table table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Sản phẩm</th>
+                    <th scope="col">Loại</th>
+                    <th scope="col">Nhãn hiệu</th>
+                    <th scope="col">Còn hàng</th>
+                    <th scope="col">Tồn kho</th>
+                    <th scope="col">Ngày khởi tạo</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Các dòng sản phẩm -->
+                <tr>
+                    <th scope="row">1</th>
+                    <td>Máy massage cổ Đại Việt DVMG-0001</td>
+                    <td>Thiết bị CSSK</td>
+                    <td>Daikiosan</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>09/05/2023</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,5 +1,6 @@
 package com.example.classicfashion.controller;
 
+import com.example.classicfashion.service.CategoryService;
 import com.example.classicfashion.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AdminController {
 
     private final UserService userService;
+    private final CategoryService categoryService;
     @Autowired
-    public AdminController(UserService userService) {
+    public AdminController(UserService userService, CategoryService categoryService) {
         this.userService = userService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("/delete-user/{id}")
@@ -28,5 +31,16 @@ public class AdminController {
     public String showUserList(Model model){
         model.addAttribute("user", userService.getAllUsers());
         return "admin/user-list";
+    }
+
+    @GetMapping
+    public String showProductList(){
+        return "admin/product-list";
+    }
+
+    @GetMapping("/category-list")
+    public String showCategoryList(Model model){
+        model.addAttribute("categoryList", categoryService.getAllCategory());
+        return "admin/category-list";
     }
 }

@@ -53,29 +53,30 @@
                 <a class="nav-link" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fas fa-user"></i>
                 </a>
-               	<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
-				    <!-- Kiểm tra xem người dùng đã đăng nhập hay chưa -->
-				    <li th:if="${user != null}">
-				        <!-- Hiển thị tên người dùng khi đã đăng nhập -->
-				        <a class="dropdown-item" th:href="@{/user/edit/{id}(id=${user.id})}" th:text="${user.userName}">UserName</a>
-				    </li>
-				    <li th:if="${user != null}">
-				        <!-- Lịch sử mua hàng -->
-				        <a class="dropdown-item" href="#">Lịch sử mua hàng</a>
-				    </li>
-				    <li th:if="${user != null}">
-				        <!-- Đăng xuất -->
-				        <a class="dropdown-item" th:href="@{/logout}">Đăng xuất</a>
-				    </li>
+              
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
+				          <!-- Kiểm tra xem người dùng đã đăng nhập hay chưa -->
+				          <li th:if="${user != null}">
+				            <a class="dropdown-item" th:href="@{/user/edit/{id}(id=${user.id})}" th:text="${user.userName}">UserName</a>
+				          </li>
+                  <li th:if="${user != null}" th:if="${isAdmin}">
+                    <a class="dropdown-item" href="/admin">Trang quản trị</a>
+                  </li>
+				          <li th:if="${user != null}">
+				            <a class="dropdown-item" href="#">Lịch sử mua hàng</a>
+				          </li>
+				          <li th:if="${user != null}">
+				            <a class="dropdown-item" th:href="@{/logout}">Đăng xuất</a>
+				          </li>
 				    
-				    <!-- Hiển thị Đăng ký và Đăng nhập khi chưa đăng nhập -->
-				    <li th:if="${user == null}">
-				        <a class="dropdown-item" href="/auth/register">Đăng ký</a>
-				    </li>
-				    <li th:if="${user == null}">
-				        <a class="dropdown-item" href="/login">Đăng nhập</a>
-				    </li>
-				</ul>
+				          <!-- Hiển thị Đăng ký và Đăng nhập khi chưa đăng nhập -->
+				          <li th:if="${user == null}">
+				            <a class="dropdown-item" href="/auth/register">Đăng ký</a>
+				          </li>
+				          <li th:if="${user == null}">
+				            <a class="dropdown-item" href="/login">Đăng nhập</a>
+				          </li>
+				        </ul>
             </div>
 
             <!-- Giỏ hàng -->

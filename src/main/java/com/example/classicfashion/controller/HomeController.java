@@ -19,7 +19,12 @@ public class HomeController {
     @GetMapping
     public String showHomePage(Model model){
         Users currentUser = userService.getCurrentUser();
-        model.addAttribute("user", currentUser);
+        if(currentUser != null){
+            model.addAttribute("user", currentUser);
+
+            boolean isAdmin = userService.isCurrentUserAdmin();
+            model.addAttribute("isAdmin", isAdmin);
+        }
         return "home";
     }
 }

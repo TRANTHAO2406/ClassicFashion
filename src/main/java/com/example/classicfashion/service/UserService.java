@@ -28,8 +28,6 @@ public class UserService {
 		this.passwordEncoder = passwordEncoder;
 	}
 
-	private static final BCryptPasswordEncoder passwordEcorder = new BCryptPasswordEncoder();
-
 	public void registerUser(Users user, String role) {
 		user.setPassword(passwordEncoder.encode(user.getPassword())); // Encrypt password before saving
 		user.setCreatedDate(LocalDate.now()); // set createdDate
@@ -41,31 +39,6 @@ public class UserService {
 
 		UserRole userRoleModel = new UserRole(savedUser, userRole);
 		savedUser.getUserRoles().add(userRoleModel);
-	}
-
-	public Users findbyEmail(String email) {
-		return userRepository.findUserByEmail(email).orElse(null);
-	}
-
-	public void updatePassword(Users user, String newPassword) {
-		user.setPassword(passwordEncoder.encode(newPassword));
-		userRepository.save(user);
-	}
-
-	public Users getCurrentUser() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails userDetails) {
-			return userDetails.getUser();
-		}
-		return null;
-	}
-
-	public List<Users> getAllUsers() {
-		return userRepository.findAll();
-	}
-
-	public Users getUserById(Long id) {
-		return userRepository.findUsersById(id).orElseThrow(() -> new RuntimeException("User not found"));
 	}
 
 	public void saveUser(Users user){
@@ -89,15 +62,41 @@ public class UserService {
 		userRepository.save(user);
 	}
 
+	public Users getUserbyEmail(String email) {
+		return userRepository.findUserByEmail(email).orElse(null);
+	}
+
+	public List<Users> getAllUsers() {
+		return userRepository.findAll();
+	}
+
+	public Users getUserById(Long id) {
+		return userRepository.findUsersById(id).orElseThrow(() -> new RuntimeException("User not found"));
+	}
+	public void updatePassword(Users user, String newPassword) {
+		user.setPassword(passwordEncoder.encode(newPassword));
+		userRepository.save(user);
+	}
+
+	public Users getCurrentUser() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails userDetails) {
+			return userDetails.getUser();
+		}
+		return null;
+	}
+
+	public boolean isCurrentUserAdmin(){
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		if(authentication != null && authentication.isAuthenticated()){
+			return authentication.getAuthorities().stream()
+					.anyMatch(authority -> authority.getAuthority().equalsIgnoreCase("ROLE_ADMIN"));
+		}
+		return false;
+	}
+
 	public void deleteUserById(Long id) {
 		userRepository.deleteById(id);
-	}
-
-	public Users getUserByUserName(String userName) {
-		return userRepository.findUserByUserName(userName).orElse(null);
-	}
-
-	public Boolean doPasswordMatch(String rawPassword, String encodedPassword) {
-		return passwordEcorder.matches(rawPassword, encodedPassword);
 	}
 }
