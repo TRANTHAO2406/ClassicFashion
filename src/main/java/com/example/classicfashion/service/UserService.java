@@ -2,20 +2,19 @@ package com.example.classicfashion.service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
-import com.example.classicfashion.model.Role;
-import com.example.classicfashion.model.UserRole;
-import com.example.classicfashion.repository.RoleRepository;
-import com.example.classicfashion.security.CustomUserDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.classicfashion.model.Role;
+import com.example.classicfashion.model.UserRole;
 import com.example.classicfashion.model.Users;
+import com.example.classicfashion.repository.RoleRepository;
 import com.example.classicfashion.repository.UserRepository;
+import com.example.classicfashion.security.CustomUserDetails;
 
 @Service
 public class UserService {
@@ -30,9 +29,7 @@ public class UserService {
 	}
 
 	public void registerUser(Users user, String role) {
-		System.out.println("Mật khẩu trước mã hóa" + user.getPassword());
 		user.setPassword(passwordEncoder.encode(user.getPassword())); // Encrypt password before saving
-		System.out.println("Mật khẩu sau mã hóa" + user.getPassword());
 		user.setCreatedDate(LocalDate.now()); // set createdDate
 		user.setStatus("PENDING"); // set status
 

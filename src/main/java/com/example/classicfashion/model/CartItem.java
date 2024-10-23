@@ -1,7 +1,6 @@
 package com.example.classicfashion.model;
 
 public class CartItem {
-
 	private Long productID;
 	private String name;
 	private double price;
@@ -90,5 +89,9 @@ public class CartItem {
 		this.isSelected = isSelected;
 	}
 	
-
+	@Override
+	public String toString() {
+		return "CartItem [productID=" + productID + ", name=" + name + ", price=" + price + ", imgLink=" + imgLink
+				+ ", color=" + color + ", size=" + size + ", quantity=" + quantity + ", isSelected=" + isSelected + "]";
+	}
 }
