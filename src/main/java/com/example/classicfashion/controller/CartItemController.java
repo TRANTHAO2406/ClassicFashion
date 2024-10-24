@@ -1,7 +1,6 @@
 package com.example.classicfashion.controller;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -14,17 +13,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.classicfashion.model.CartItem;
 import com.example.classicfashion.model.Color;
-import com.example.classicfashion.model.Order;
-import com.example.classicfashion.model.OrderDetail;
 import com.example.classicfashion.model.ProductDetail;
 import com.example.classicfashion.model.Size;
 import com.example.classicfashion.model.Users;
 import com.example.classicfashion.service.CartItemService;
 import com.example.classicfashion.service.ColorService;
-import com.example.classicfashion.service.OrderDetailService;
-import com.example.classicfashion.service.OrderService;
 import com.example.classicfashion.service.ProductDetailService;
-import com.example.classicfashion.service.ProductService;
 import com.example.classicfashion.service.SizeService;
 import com.example.classicfashion.service.UserService;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -40,21 +34,14 @@ public class CartItemController {
 	private ProductDetailService productDetailService;
 	private ColorService colorService;
 	private SizeService sizeService;
-	private OrderService orderService;
-	private OrderDetailService orderDetailService;
-	private ProductService productService;
 	private UserService userService;
 
 	public CartItemController(CartItemService cartItemService, ProductDetailService productDetailService,
-			ColorService colorService, SizeService sizeService, OrderService orderService,
-			OrderDetailService orderDetailService, ProductService productService,UserService userService) {
+			ColorService colorService, SizeService sizeService,UserService userService) {
 		this.cartItemService = cartItemService;
 		this.productDetailService = productDetailService;
 		this.colorService = colorService;
 		this.sizeService = sizeService;
-		this.orderService = orderService;
-		this.orderDetailService = orderDetailService;
-		this.productService = productService;
 		this.userService = userService;
 	}
 
@@ -122,55 +109,20 @@ public class CartItemController {
 		return "redirect:/shopping-cart/view";
 	}
 
+	
+	
+	
 	@PostMapping("/submit")
 	public String processCheckout(@RequestParam String cartItems, Model model, HttpSession session) {
-		
 		Collection<CartItem> cartItemsList = parseCartItems(cartItems);
 		if (cartItemsList.isEmpty()) {
 			model.addAttribute("message", "Your cart is empty!");
 			return "redirect:/shopping-cart/view";
 		}
-
-		Order order = new Order();
-
-		Users currentUser = userService.getCurrentUser();
-		if (currentUser != null) {
-			order.setUser(currentUser);
-		}
-		order.setOrderDate(LocalDate.now());
-		order.setShippingPrice(5.0);
-		double totalAmount = 0.0;
-
-		order.setStatus("Pending");
-		order.setUpdatedDate(LocalDate.now());
-		order.setTotalPrice(totalAmount + order.getShippingPrice());
-		orderService.save(order);
-		for (CartItem cartItem : cartItemsList) {
-			if (cartItem.getIsSelected()) {
-				OrderDetail orderDetail = new OrderDetail();
-				orderDetail.setOrder(order);
-				orderDetail.setProduct(productService.findById(cartItem.getProductID()));
-				orderDetail.setQuantity(cartItem.getQuantity());
-				orderDetail.setPrice(cartItem.getPrice());
-				orderDetail.setSubTotal(cartItem.getQuantity() * cartItem.getPrice());
-
-				orderDetailService.save(orderDetail);
-
-				totalAmount += orderDetail.getSubTotal();
-			}
-		}
-
-		order.setTotalPrice(totalAmount + order.getShippingPrice());
-		orderService.save(order);
-
-		cartItemService.removeSelectedItems(cartItemsList);
-
-		model.addAttribute("message", "Your order has been placed successfully!");
-		model.addAttribute("order", order);
-		System.out.println(order.toString());
+		session.setAttribute("cartItems", cartItemsList);
 		return "redirect:/checkout";
-
 	}
+	
 
 	private Collection<CartItem> parseCartItems(String cartItemsJson) {
 		ObjectMapper objectMapper = new ObjectMapper();

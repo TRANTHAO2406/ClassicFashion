@@ -57,13 +57,16 @@ public class CartItemService {
 	}
 
 	public void removeSelectedItems(Collection<CartItem> cartItems) {
-	    List<CartItem> itemsToRemove = new ArrayList<>();
+	    List<String> keysToRemove = new ArrayList<>();
 	    for (CartItem cartItem : cartItems) {
-	        if (cartItem.getIsSelected()) { // Kiểm tra sản phẩm có được chọn không
-	            itemsToRemove.add(cartItem);
+	        if (cartItem.getIsSelected()) { 
+	            String key = createKey(cartItem.getProductID(), cartItem.getColor(), cartItem.getSize());
+	            keysToRemove.add(key); 
 	        }
 	    }
-	    cartItems.removeAll(itemsToRemove); // Xóa các sản phẩm đã chọn khỏi giỏ hàng
+	    for (String key : keysToRemove) {
+	        maps.remove(key);
+	    }
 	}
 
 }

@@ -44,7 +44,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers( "/auth/**", "/login/**","/product/**", "/forgot-password/**",
                                          "/uploads/**", "/shopping-cart/**", "/checkout/**", "/user/**",
-                                         "/css/**", "/javascript/**","/img/**").permitAll()  
+                                         "/css/**", "/javascript/**","/img/**","/transaction/**","/orderDetails/**").permitAll()  
                         .requestMatchers("/admin/**").hasRole("ADMIN")  // for admin role
                         .anyRequest().authenticated()
                    

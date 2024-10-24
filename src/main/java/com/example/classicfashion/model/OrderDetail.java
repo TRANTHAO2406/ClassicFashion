@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -22,30 +23,31 @@ public class OrderDetail {
 	private Order order;
 
 	@ManyToOne
-	@JoinColumn(name = "productId")
-	private Product product;
+	@JoinColumns({ @JoinColumn(name = "productId", referencedColumnName = "productId"),
+			@JoinColumn(name = "colorId", referencedColumnName = "colorId"),
+			@JoinColumn(name = "sizeId", referencedColumnName = "sizeId") })
+	private ProductDetail productDetail;
 
 	@Column(nullable = false)
 	private Integer quantity;
 
 	@Column(name = "subTotal", nullable = false)
 	private Double subTotal;
-	
+
 	@Column(name = "price", nullable = false)
 	private Double price;
 
-	public OrderDetail(Long id, Order order, Product product, Integer quantity, Double subTotal,Double price) {
-		super();
+	public OrderDetail() {
+	}
+
+	public OrderDetail(Long id, Order order, ProductDetail productDetail, Integer quantity, Double subTotal,
+			Double price) {
 		this.id = id;
 		this.order = order;
-		this.product = product;
+		this.productDetail = productDetail;
 		this.quantity = quantity;
 		this.subTotal = subTotal;
 		this.price = price;
-	}
-
-	public OrderDetail() {
-		super();
 	}
 
 	public Long getId() {
@@ -64,12 +66,12 @@ public class OrderDetail {
 		this.order = order;
 	}
 
-	public Product getProduct() {
-		return product;
+	public ProductDetail getProductDetail() {
+		return productDetail;
 	}
 
-	public void setProduct(Product product) {
-		this.product = product;
+	public void setProductDetail(ProductDetail productDetail) {
+		this.productDetail = productDetail;
 	}
 
 	public Integer getQuantity() {
@@ -95,5 +97,5 @@ public class OrderDetail {
 	public void setPrice(Double price) {
 		this.price = price;
 	}
-
+	
 }

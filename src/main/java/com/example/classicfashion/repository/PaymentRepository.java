@@ -8,4 +8,6 @@ import com.example.classicfashion.model.Payment;
 @Repository
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
+	Payment findByPaymentMethod(String paymentMethod);
+
 }

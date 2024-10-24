@@ -8,6 +8,7 @@
     <link rel="stylesheet" th:href="@{/css/navigation.css}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 	<div th:replace="~{/fragment/navigation :: navigation}"></div>
@@ -15,21 +16,46 @@
     <div class="container mt-5 pt-5">
         <h2 class="mb-3">Thanh toán đơn hàng</h2>
 
-        <!-- Địa chỉ nhận hàng -->
-        
-    <div class="row mb-4">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header"><h5>Địa Chỉ Nhận Hàng</h5></div>
-                    <div class="card-body">
-                        <p class="font-weight-bold" th:text="${user.userName}"></p>
-                        <p class="font-weight-bold" th:text="${user.phone}"></p>
-                        <p th:text="${user.address}"></p>
-                    </div>
+   <div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Địa Chỉ Nhận Hàng</h5>
+                <button class="btn btn-primary float-right" id="editAddressBtn">Chỉnh sửa</button>
+            </div>
+            <div class="card-body">
+                <!-- Hiển thị thông tin địa chỉ nhận hàng -->
+                <div id="addressDisplay">
+                    <p class="font-weight-bold" th:text="${user.userName}"></p>
+                    <p class="font-weight-bold" th:text="${user.phone}"></p>
+                    <p th:text="${user.address}"></p>
+                </div>
+                
+                <!-- Form chỉnh sửa địa chỉ -->
+                <div id="editAddressForm" style="display: none;">
+                    <form method="post" action="/update-address">
+                        <div class="form-group">
+                            <label for="userName">Họ và tên</label>
+                            <input type="text" class="form-control" id="userName" name="userName" th:value="${user.userName}">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Số điện thoại</label>
+                            <input type="text" class="form-control" id="phone" name="phone" th:value="${user.phone}">
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Địa chỉ</label>
+                            <textarea class="form-control" id="address" name="address" rows="3" th:text="${user.address}"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success">Cập nhật địa chỉ</button>
+                        <button type="button" class="btn btn-secondary" id="cancelEditAddress">Hủy</button>
+                    </form>
                 </div>
             </div>
         </div>
- 
+    </div>
+</div>
+
+
         <!-- Sản phẩm thanh toán -->
         <div class="row mb-4">
             <div class="col-md-12">
@@ -47,9 +73,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-		                        <tr th:each="cartItem : ${oder}">
+		                        <tr th:each="cartItem : ${cartItems}">
 								    <td>
-								        <img th:src="@{${cartItem.imgLink}}" th:alt="${cartItem.name}" width="100" height="100" />
+								        <img th:src="${cartItem.imgLink}" th:alt="${cartItem.name}" width="100" height="100" />
 								    </td>
 								    <td>
 								        <p th:text="${cartItem.name}"></p>
@@ -62,6 +88,7 @@
 								</tr>
                             </tbody>
                         </table>
+                       <h5 >Tổng tiền: <a th:text="${totalPrice}"></a></h5>
                     </div>
                 </div>
             </div>
@@ -144,6 +171,91 @@
             </div>
         </form>
     </div>
+<script>
+$(document).ready(function() {
+	// Function to format numbers as currency
+    function formatCurrency(value) {
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' })
+            .format(value)
+            .replace(/\D00(?=\D*$)/, ' đ');  // Replace unwanted decimals with ' đ'
+    }
+	
+    // Calculate delivery dates
+    const today = new Date();
+    const standardDeliveryDate = new Date(today);
+    standardDeliveryDate.setDate(today.getDate() + 2);
+    const fastDeliveryDate = new Date(today);
+    fastDeliveryDate.setDate(today.getDate() + 1);
 
+    $('#standardDeliveryDate').text('Dự kiến nhận hàng: ' + standardDeliveryDate.toLocaleDateString());
+    $('#fastDeliveryDate').text('Dự kiến nhận hàng: ' + fastDeliveryDate.toLocaleDateString());
+
+    // Update total price with shipping cost
+    function updateTotalPrice() {
+        const shippingCost = parseInt($('input[name="shippingMethod"]:checked').val());
+        const orderTotal = parseFloat($('#orderTotalPrice').data('total')); // Use data attribute instead of raw text
+        
+        const totalPrice = orderTotal + shippingCost;
+
+        // Use formatCurrency function to format the displayed values
+        $('#shippingCost').text(formatCurrency(shippingCost));
+        $('#totalPriceWithShipping').text(formatCurrency(totalPrice));
+
+        // Set hidden input values
+        $('#shippingMethodInput').val(shippingCost);
+        $('#totalPriceInput').val(totalPrice);
+    }
+    
+    // Format prices on page load
+    function formatAllPrices() {
+        // Format order total price
+        const orderTotal = parseFloat($('#orderTotalPrice').data('total'));
+        $('#orderTotalPrice').text(formatCurrency(orderTotal));
+
+        // Format each item's price and total
+        $('.item-price').each(function() {
+            const itemPrice = parseFloat($(this).data('price'));
+            $(this).text(formatCurrency(itemPrice));
+        });
+
+        $('.item-total').each(function() {
+            const itemTotal = parseFloat($(this).data('total'));
+            $(this).text(formatCurrency(itemTotal));
+        });
+    }
+
+    // Handle shipping method change
+    $('input[name="shippingMethod"]').on('change', function() {
+        updateTotalPrice();
+    });
+
+    // Handle payment method selection and update the hidden input
+    $('input[name="paymentMethod"]').on('change', function() {
+        const selectedPaymentMethod = $('input[name="paymentMethod"]:checked').val();
+        $('#paymentMethodInput').val(selectedPaymentMethod);  // Update the hidden input
+        $('#checkoutBtn').prop('disabled', false);  // Enable the checkout button
+        $('#paymentWarning').hide();  // Hide payment warning
+    });
+
+    // Initial calculation
+    formatAllPrices();
+    updateTotalPrice();
+});
+</script>
+<script>
+$(document).ready(function() {
+    // Khi nhấn nút "Chỉnh sửa" sẽ hiện form
+    $('#editAddressBtn').on('click', function() {
+        $('#addressDisplay').hide();
+        $('#editAddressForm').show();
+    });
+
+    // Khi nhấn nút "Hủy" sẽ quay lại hiển thị địa chỉ mà không chỉnh sửa
+    $('#cancelEditAddress').on('click', function() {
+        $('#editAddressForm').hide();
+        $('#addressDisplay').show();
+    });
+});
+</script>
 </body>
 </html>
