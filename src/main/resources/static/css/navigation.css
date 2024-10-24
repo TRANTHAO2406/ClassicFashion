@@ -1,5 +1,10 @@
 .navbar-custom {
     background-color: #000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
 }
 .navbar-custom .nav-link, .navbar-custom .navbar-brand {
     color: #fff;

@@ -1,0 +1,91 @@
+/* Footer */
+.footer {
+    background-color: #000;
+    color: #fff;
+    padding-top: 30px;
+    padding-bottom: 10px;
+}
+
+.footer h5 {
+    color: #f1c40f;
+    margin-bottom: 20px;
+}
+
+.footer p,
+.footer a {
+    color: #fff;
+    margin-bottom: 10px;
+    font-size: 14px;
+    text-decoration: none; /* Loại bỏ gạch dưới ở liên kết */
+}
+
+.footer a:hover {
+    color: #f1c40f;
+    text-decoration: none; /* Đảm bảo không có gạch dưới khi hover */
+}
+
+.footer ul {
+    padding-left: 0;
+    list-style: none;
+}
+
+.footer ul li {
+    margin-bottom: 10px;
+}
+
+.footer ul li a {
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+.footer .social-icons {
+    margin-top: 15px;
+}
+
+.footer .social-icons a {
+    display: inline-block;
+    margin-right: 10px;
+    color: #fff;
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+
+.footer .social-icons a:hover {
+    color: #f1c40f;
+}
+
+.footer .social-icons i {
+    font-size: 20px;
+}
+
+.footer p.mb-0 {
+    font-size: 13px;
+    border-top: 1px solid #444;
+    padding-top: 10px;
+    margin-top: 30px;
+}
+
+.footer .container {
+    max-width: 1200px;
+}
+
+/* Khoảng cách giữa phần thân và footer */
+.container {
+    margin-bottom: 50px; /* Thêm khoảng hở giữa phần nội dung và footer */
+}
+
+/* Responsive Footer */
+@media (max-width: 768px) {
+    .footer h5 {
+        text-align: center;
+    }
+
+    .footer p,
+    .footer a {
+        text-align: center;
+    }
+
+    .footer .social-icons {
+        text-align: center;
+    }
+}

@@ -1,4 +1,6 @@
+
 /* banner slide */
+
 .carousel-item img {
     width: 100%;
     object-fit: cover;
@@ -40,6 +42,7 @@
 /* banner grid */
 .promo-grid {
     margin-top: 20px;
+    margin-bottom: 20px;
 }
 .promo-grid img {
     width: 100%;

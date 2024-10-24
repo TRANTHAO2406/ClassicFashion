@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<div th:fragment="footer">
+    <footer class="footer pt-5">
+        <div class="container">
+            <div class="row">
+                <!-- column 1: Shop information -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h5 class="font-weight-bold text-uppercase">Thời trang clasic Dustyman Fashion</h5>
+                    <p>Hệ thống thời trang classic cho phái mạnh hàng đầu Việt Nam, hướng tới phong cách cổ điển, lịch lãm và trẻ trung.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+
+                <!-- Column 2: Contact -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h5 class="font-weight-bold text-uppercase">Thông tin liên hệ</h5>
+                    <p><strong>Địa chỉ:</strong> Tầng 5, tòa nhà Manor Crown, số 32 Tố Hữu, Xuân Phú, Huế</p>
+                    <p><strong>Điện thoại:</strong> 0905686868</p>
+                    <p><strong>Email:</strong> cskh@dustymanclassic.vn</p>
+                </div>
+
+                <!-- Column 3: Customer Service -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h5 class="font-weight-bold text-uppercase">Dịch vụ khách hàng</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/aboutus">Giới thiệu</a></li>
+                        <li><a href="/aboutus">Chính sách đổi trả</a></li>
+                        <li><a href="/aboutus">Liên hệ</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-copyright text-center py-3">
+            <p class="mb-0">© 2024 Dustyman Classic. Powered by TH Team</p>
+        </div>
+    </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
