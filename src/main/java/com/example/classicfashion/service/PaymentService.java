@@ -32,4 +32,10 @@ public class PaymentService {
 				.orElseThrow(() -> new IllegalArgumentException("Khong tim thay Payment"));
 	}
 
+	public Payment findPaymentByMethod(String paymentMethod) {
+		return paymentRepository.findByPaymentMethod(paymentMethod);
+		
+	}
+	
+
 }

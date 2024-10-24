@@ -45,16 +45,17 @@ public class Product {
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
 	private List<Discount> discounts;
 
-	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-	private List<OrderDetail> orderDetails;
+//	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+//	private List<OrderDetail> orderDetails;
 
 	@OneToMany(mappedBy = "productId", cascade = CascadeType.ALL)
 	private List<ProductDetail> productDetails;
 
 	public Product() {
 	}
-  
-	public Product(Long id, String productName, Category category, Users user, int status, LocalDate createdDate, LocalDate updatedDate) {
+
+	public Product(Long id, String productName, Category category, Users user, int status, LocalDate createdDate,
+			LocalDate updatedDate) {
 		this.id = id;
 		this.productName = productName;
 		this.category = category;
@@ -128,13 +129,13 @@ public class Product {
 		this.discounts = discounts;
 	}
 
-	public List<OrderDetail> getOrderDetails() {
-		return orderDetails;
-	}
-
-	public void setOrderDetails(List<OrderDetail> orderDetails) {
-		this.orderDetails = orderDetails;
-	}
+//	public List<OrderDetail> getOrderDetails() {
+//		return orderDetails;
+//	}
+//
+//	public void setOrderDetails(List<OrderDetail> orderDetails) {
+//		this.orderDetails = orderDetails;
+//	}
 
 	public List<ProductDetail> getProductDetails() {
 		return productDetails;
@@ -148,9 +149,7 @@ public class Product {
 	public String toString() {
 		return "Product [id=" + id + ", productName=" + productName + ", category=" + category + ", user=" + user
 				+ ", status=" + status + ", createdDate=" + createdDate + ", updatedDate=" + updatedDate
-				+ ", discounts=" + discounts + ", orderDetails=" + orderDetails + ", productDetails=" + productDetails
-				+ "]";
+				+ ", discounts=" + discounts + ", productDetails=" + productDetails + "]";
 	}
 
-	
 }

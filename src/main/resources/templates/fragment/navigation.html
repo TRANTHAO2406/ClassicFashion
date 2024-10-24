@@ -59,11 +59,11 @@
 				          <li th:if="${user != null}">
 				            <a class="dropdown-item" th:href="@{/user/edit/{id}(id=${user.id})}" th:text="${user.userName}">UserName</a>
 				          </li>
-                          <li th:if="${user != null} and ${isAdmin}">
-                            <a class="dropdown-item" href="/admin">Trang quản trị</a>
-                          </li>
+                  <li th:if="${user != null} and ${isAdmin}">
+                    <a class="dropdown-item" href="/admin">Trang quản trị</a>
+                  </li>
 				          <li th:if="${user != null}">
-				            <a class="dropdown-item" href="#">Lịch sử mua hàng</a>
+				            <a class="dropdown-item" href="/transaction">Lịch sử mua hàng</a>
 				          </li>
 				          <li th:if="${user != null}">
 				            <a class="dropdown-item" th:href="@{/logout}">Đăng xuất</a>

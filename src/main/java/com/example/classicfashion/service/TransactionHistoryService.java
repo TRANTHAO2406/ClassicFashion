@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.classicfashion.model.Order;
 import com.example.classicfashion.model.TransactionHistory;
 import com.example.classicfashion.repository.TransactionHistoryRepository;
 
@@ -31,4 +32,9 @@ public class TransactionHistoryService {
 		return transactionHistoryRepository.findById(Id)
 				.orElseThrow(() -> new IllegalArgumentException("Khong tim thay TransactionHistory"));
 	}
+	public List<TransactionHistory> getByOders(Order oder) {
+		return transactionHistoryRepository.findByOrder(oder);
+		
+	}
+
 }

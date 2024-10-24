@@ -32,4 +32,8 @@ public class OrderDetailService {
 				.orElseThrow(() -> new IllegalArgumentException("Khong tim thay OrderDetail"));
 	}
 
+	public List<OrderDetail> getOrderDetailsByOrderId(Long id) {
+		return orderDetailRepository.findOrderDetailsByOrderId(id);
+	}
+
 }
