@@ -1,0 +1,45 @@
+/* Style cho phần tiêu đề và form */
+.bg-light {
+    background-color: #ffffff !important;
+    color: #000000;
+}
+
+h4 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/* Khoảng cách padding cho form */
+.form-label {
+    font-weight: bold;
+}
+
+input.form-control {
+    border: 1px solid #ced4da;
+}
+
+/* Style cho các nút */
+.btn-primary {
+    background-color: #f1c40f;
+    border-color: #f1c40f;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #e2ac0a;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #565e64;
+}
+
+/* Tạo khoảng cách giữa các nút */
+.btn {
+    margin-right: 10px;
+}

@@ -1,6 +1,6 @@
 body {
-    background-color: #f8f9fa; /* Màu nền trắng sáng */
-    color: #000; /* Màu chữ đen */
+    background-color: #f8f9fa;
+    color: #000;
     font-family: Arial, sans-serif;
 }
 .main-content {
@@ -9,7 +9,7 @@ body {
 }
 .table th, .table td {
     color: #000;
-    background-color: #fff; /* Nền bảng màu trắng */
+    background-color: #fff;
 }
 .table th {
     background-color: #e9ecef;
@@ -24,4 +24,64 @@ body {
 }
 .form-control {
     max-width: 400px;
+}
+
+/* Pagination */
+.pagination .page-item .page-link {
+    color: #000;
+    background-color: #fff;
+    border: 1px solid #e9ecef;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    outline: none;
+}
+
+.pagination .page-item .page-link:focus {
+    outline: none;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #f1c40f;
+    color: #fff;
+    border-color: #f1c40f;
+}
+
+.pagination .page-item:hover .page-link {
+    background-color: #f1c40f;
+    color: #fff;
+    border-color: #f1c40f;
+}
+
+.pagination .page-item.disabled .page-link {
+    background-color: #e9ecef;
+    color: #6c757d;
+    border-color: #e9ecef;
+}
+
+.form-control {
+    max-width: 400px;
+    border: 1px solid #ccc;
+}
+
+.btn-warning {
+    background-color: #f1c40f;
+    color: #fff;
+    border: none;
+}
+
+.btn-warning:hover {
+    background-color: #e2ac0a;
+    color: #fff;
+}
+
+/* icon edit*/
+.table td i.fa-edit {
+    color: #ffc107;
+    font-size: 20px;
+    display: block;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 40px;
+}
+.table td {
+    height: 50px;
 }

@@ -1,5 +1,6 @@
 package com.example.classicfashion.controller;
 
+import com.example.classicfashion.model.Category;
 import com.example.classicfashion.service.CategoryService;
 import com.example.classicfashion.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,9 +39,4 @@ public class AdminController {
         return "admin/product-list";
     }
 
-    @GetMapping("/category-list")
-    public String showCategoryList(Model model){
-        model.addAttribute("categoryList", categoryService.getAllCategory());
-        return "admin/category-list";
-    }
 }
