@@ -10,7 +10,7 @@
 <div th:fragment="navigation">
 <nav class="navbar navbar-expand-lg navbar-custom">
     <div class="container-fluid">
-        <!-- Dropdown menus bên trái -->
+        <!-- Mega menu -->
         <div class="navbar-nav me-auto">
             <div class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="aoNamDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -37,31 +37,31 @@
             <a class="nav-link text-danger" href="/product/view">SALE</a>
         </div>
 
-        <!-- Logo giữa thanh nav -->
+        <!-- Logo -->
         <a class="navbar-brand mx-auto" href="/home">DUSTYMAN <span class="text-warning">CLASSIC</span></a>
 
-        <!-- Tìm kiếm, tài khoản, giỏ hàng tách riêng -->
+        <!-- Search, account and cart -->
         <div class="d-flex ms-auto align-items-center">
-            <!-- Tìm kiếm -->
+            <!-- Search -->
             <div class="search-box input-group me-3">
                 <input type="text" class="form-control" placeholder="Tìm kiếm...">
                 <button class="btn btn-light"><i class="fas fa-search"></i> Tìm kiếm</button>
             </div>
 
-            <!-- Tài khoản -->
+            <!-- Account -->
             <div class="account-dropdown me-3">
                 <a class="nav-link" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fas fa-user"></i>
                 </a>
               
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
-				          <!-- Kiểm tra xem người dùng đã đăng nhập hay chưa -->
+				          <!-- is user -->
 				          <li th:if="${user != null}">
 				            <a class="dropdown-item" th:href="@{/user/edit/{id}(id=${user.id})}" th:text="${user.userName}">UserName</a>
 				          </li>
-               <!--    <li th:if="${user != null}" th:if="${isAdmin}">
+                  <li th:if="${user != null} and ${isAdmin}">
                     <a class="dropdown-item" href="/admin">Trang quản trị</a>
-                  </li> -->
+                  </li>
 				          <li th:if="${user != null}">
 				            <a class="dropdown-item" href="/transaction">Lịch sử mua hàng</a>
 				          </li>
@@ -69,7 +69,7 @@
 				            <a class="dropdown-item" th:href="@{/logout}">Đăng xuất</a>
 				          </li>
 				    
-				          <!-- Hiển thị Đăng ký và Đăng nhập khi chưa đăng nhập -->
+				          <!-- is guest -->
 				          <li th:if="${user == null}">
 				            <a class="dropdown-item" href="/auth/register">Đăng ký</a>
 				          </li>
@@ -79,7 +79,7 @@
 				        </ul>
             </div>
 
-            <!-- Giỏ hàng -->
+            <!-- Cart -->
             <div class="shopping-cart">
                 <a class="nav-link" href="/shopping-cart/view"><i class="fas fa-shopping-cart"></i></a>
             </div>

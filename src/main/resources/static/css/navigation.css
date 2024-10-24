@@ -1,21 +1,21 @@
 .navbar-custom {
-    background-color: #000; /* Màu đen như trong hình */
+    background-color: #000;
 }
 .navbar-custom .nav-link, .navbar-custom .navbar-brand {
     color: #fff;
 }
 .navbar-custom .nav-link:hover, .navbar-custom .dropdown-menu a:hover {
-    color: #f1c40f; /* Màu vàng khi hover */
+    color: #f1c40f;
 }
 .dropdown-menu {
-    background-color: #000; /* Màu đen cho dropdown */
-    border-color: #333; /* Viền cho dropdown */
+    background-color: #000;
+    border-color: #333;
 }
 .dropdown-item {
-    color: #fff; /* Màu trắng cho chữ trong dropdown */
+    color: #fff;
 }
 .dropdown-item:hover {
-    background-color: #333; /* Màu khi hover trong dropdown */
+    background-color: #333;
 }
 .search-box input {
     border: none;
