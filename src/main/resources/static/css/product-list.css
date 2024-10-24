@@ -9,7 +9,7 @@ body {
 }
 .table th, .table td {
     color: #000;
-    background-color: #fff; /* Nền bảng màu trắng */
+    background-color: #fff;
 }
 .table th {
     background-color: #e9ecef;
