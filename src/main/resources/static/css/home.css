@@ -1,0 +1,60 @@
+/* banner slide */
+.carousel-item img {
+    width: 100%;
+    object-fit: cover;
+}
+
+/* prev and next button */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: black;
+    border-radius: 50%;
+}
+
+/* intro */
+.intro-section {
+    background-color: #f8f9fa;
+    padding: 20px 0;
+}
+.intro-section .icon-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+}
+.icon-box img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    margin-right: 15px;
+}
+.icon-box h5 {
+    font-weight: bold;
+    margin: 0;
+}
+.icon-box p {
+    margin: 0;
+    font-size: 14px;
+}
+
+/* banner grid */
+.promo-grid {
+    margin-top: 20px;
+}
+.promo-grid img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+.promo-item {
+    position: relative;
+}
+
+.promo-item img {
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.promo-item:hover img {
+    transform: scale(1.1);
+    filter: brightness(1.2);
+}

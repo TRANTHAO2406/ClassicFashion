@@ -3,6 +3,8 @@ package com.example.classicfashion.service;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -70,6 +72,13 @@ public class UserService {
 		return userRepository.findAll();
 	}
 
+	public Page<Users> getAllUsers(Pageable pageable){
+		return userRepository.findAll(pageable);
+	}
+
+	public Page<Users> searchUsers(String keyword, Pageable pageable){
+		return userRepository.searchUsersByUserName(keyword, pageable);
+	}
 	public Users getUserById(Long id) {
 		return userRepository.findUsersById(id).orElseThrow(() -> new RuntimeException("User not found"));
 	}
