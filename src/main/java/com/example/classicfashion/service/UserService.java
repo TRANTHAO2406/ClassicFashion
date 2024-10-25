@@ -105,7 +105,7 @@ public class UserService {
 		return false;
 	}
 
-	public void deleteUserById(Long id) {
-		userRepository.deleteById(id);
+	public Long getTotalUsers(){
+		return userRepository.count();
 	}
 }

@@ -45,4 +45,8 @@ public class CategoryService {
 		}
 		categoryRepository.save(category);
 	}
+
+	public Long getTotalCategory(){
+		return categoryRepository.count();
+	}
 }

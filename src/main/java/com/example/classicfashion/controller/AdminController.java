@@ -1,6 +1,7 @@
 package com.example.classicfashion.controller;
 
 import com.example.classicfashion.model.Users;
+import com.example.classicfashion.service.CategoryService;
 import com.example.classicfashion.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,13 +17,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class AdminController {
 
     private final UserService userService;
+    private  final CategoryService categoryService;
     @Autowired
-    public AdminController(UserService userService) {
+    public AdminController(UserService userService, CategoryService categoryService) {
         this.userService = userService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("/customer-list")
-    public String showCategoryList(Model model,
+    public String showUserList(Model model,
                                    @RequestParam(defaultValue = "0") int page,
                                    @RequestParam(defaultValue = "5") int size,
                                    @RequestParam(required = false) String keyword) {
@@ -44,9 +47,21 @@ public class AdminController {
         return "admin/customer-list";
     }
 
-    @GetMapping
+    @GetMapping("/product-list")
     public String showProductList(){
         return "admin/product-list";
+    }
+
+    @GetMapping
+    public String showDashboard(Model model){
+        Users currentUser = userService.getCurrentUser();
+        long totalCategories = categoryService.getTotalCategory();
+        long totalUsers = userService.getTotalUsers();
+
+        model.addAttribute("user", currentUser);
+        model.addAttribute("totalCategories", totalCategories);
+        model.addAttribute("totalUsers", totalUsers);
+        return "admin/dashboard";
     }
 
 }

@@ -4,16 +4,26 @@
     color: #fff;
     padding-top: 20px;
 }
+/* DUSTYMAN CLASSIC */
+.sidebar .navbar-brand {
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+}
 .sidebar .nav-link {
     color: #fff;
     font-size: 16px;
+    text-decoration: none;
 }
-.sidebar .nav-link.active {
+.sidebar .nav-link {
     background-color: #000;
     color: #fff;
+    text-decoration: none;
 }
 .sidebar .nav-link:hover {
     background-color: #e2ac0a;
+    color: #fff;
 }
 .sidebar .submenu {
     background-color: #000;
@@ -21,7 +31,13 @@
 }
 .sidebar .submenu a {
     font-size: 14px;
+    text-decoration: none;
 }
 .sidebar .submenu .nav-link:hover {
     background-color: #e2ac0a;
+}
+.sidebar .nav-link.active,
+.sidebar .submenu {
+    background-color: #000;
+    text-decoration: none;
 }

@@ -1,0 +1,34 @@
+/* Banner styling */
+.banner img {
+    width: 100%;
+    height: 90%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+/* Welcome message styling */
+.welcome-message {
+    font-size: 24px;
+    font-weight: bold;
+    color: #f1c40f;
+    margin-bottom: 20px;
+}
+.card {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    margin-bottom: 20px;
+}
+
+.card i {
+    font-size: 2.5rem;
+    color: #f1c40f;
+}
+
+.card h5 {
+    margin-top: 15px;
+}
+
+.card:hover {
+    background-color: #444;
+}
