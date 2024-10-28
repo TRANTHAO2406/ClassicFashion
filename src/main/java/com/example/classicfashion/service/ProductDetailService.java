@@ -37,5 +37,8 @@ public class ProductDetailService {
 
 		return productDetailRepository.findByProductIdAndColorIdAndSizeId(product, color, size);
 	}
+	public List<ProductDetail> findByProductId(Product productId){
+		return productDetailRepository.findByProductId(productId);
+	}
 
 }

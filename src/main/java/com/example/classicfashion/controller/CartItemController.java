@@ -30,14 +30,17 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/shopping-cart")
 public class CartItemController {
 
-	private CartItemService cartItemService;
-	private ProductDetailService productDetailService;
-	private ColorService colorService;
-	private SizeService sizeService;
-	private UserService userService;
+	private static final String PRODUCT_VIEW = "redirect:/product/view";
+	private static final String SHOPPING_CART = "redirect:/shopping-cart/view";
+
+	private final CartItemService cartItemService;
+	private final ProductDetailService productDetailService;
+	private final ColorService colorService;
+	private final SizeService sizeService;
+	private final UserService userService;
 
 	public CartItemController(CartItemService cartItemService, ProductDetailService productDetailService,
-			ColorService colorService, SizeService sizeService,UserService userService) {
+			ColorService colorService, SizeService sizeService, UserService userService) {
 		this.cartItemService = cartItemService;
 		this.productDetailService = productDetailService;
 		this.colorService = colorService;
@@ -48,8 +51,11 @@ public class CartItemController {
 	@GetMapping("/view")
 	public String viewCart(Model model, HttpSession session) {
 		Users currentUser = userService.getCurrentUser();
-        model.addAttribute("user", currentUser);
+		model.addAttribute("user", currentUser);
 		Collection<CartItem> cartItems = cartItemService.getAllItems();
+		for (CartItem cartItem : cartItems) {
+			System.out.println(cartItem.toString()+"+++++");
+		}
 		model.addAttribute("cart", cartItems);
 
 		if (cartItems.isEmpty()) {
@@ -64,39 +70,48 @@ public class CartItemController {
 
 	// add product from cart
 	@PostMapping("/add")
-	public String addToCart(@RequestParam Long productId,
-							@RequestParam String color, 
+	public String addToCart(@RequestParam Long productId, 
+							@RequestParam String color,
 							@RequestParam String size,
-							@RequestParam int quantity,
+							@RequestParam int quantity, 
 							@RequestParam String action, 
 							HttpSession session, Model model) {
+		if (quantity <= 0) {
+			model.addAttribute("message", "Quantity must be greater than 0 ");
+			return PRODUCT_VIEW;
+		}
+		
 		Color colorID = colorService.findByName(color);
 		Size sizeID = sizeService.findByName(size);
-		ProductDetail productDetail = productDetailService.findByProductAndColorAndSize(productId, colorID.getId(),
-				sizeID.getId());
+		
+		ProductDetail productDetail = productDetailService.findByProductAndColorAndSize(productId, colorID.getId(), sizeID.getId());
+		
 		if (productDetail == null) {
 			model.addAttribute("error", "Product not found!");
-			return "redirect:/product/view";
+			return PRODUCT_VIEW ;
 		}
 
-		// create object CartItem to ProductDetail
 		CartItem cartItem = new CartItem(productDetail.getProductId().getId(),
 				productDetail.getProductId().getProductName(), productDetail.getPrice().doubleValue(),
 				productDetail.getImages().isEmpty() ? null : productDetail.getImages().get(0).getImgLink(),
-				productDetail.getColorId().getColorName(), productDetail.getSizeId().getSizeName(), quantity, true);
+				productDetail.getColorId().getColorName(), productDetail.getSizeId().getSizeName(), quantity, false);
 
+		if( "buy".equals(action)) {
+			cartItem.setIsSelected(true);
+		}
+		System.out.println("cartItem"+ cartItem.getQuantity());
 		cartItemService.add(cartItem);
 
 		model.addAttribute("cart", cartItemService.getAllItems());
 		model.addAttribute("totalAmount", cartItemService.getAmount());
 		model.addAttribute("totalItems", cartItemService.getCount());
 
-		return "buy".equals(action) ? "redirect:/shopping-cart/view" : "redirect:/product/view";
+		return "buy".equals(action) ? SHOPPING_CART : PRODUCT_VIEW;
 	}
 
 	// Remove product
 	@GetMapping("/remove")
-	public String removeFromCart(@RequestParam Long productId,
+	public String removeFromCart(@RequestParam Long productId, 
 								@RequestParam String colorId,
 								@RequestParam String sizeId, 
 								Model model) {
@@ -106,23 +121,19 @@ public class CartItemController {
 		model.addAttribute("cart", cartItemService.getAllItems());
 		model.addAttribute("totalAmount", cartItemService.getAmount());
 		model.addAttribute("totalItems", cartItemService.getCount());
-		return "redirect:/shopping-cart/view";
+		return SHOPPING_CART;
 	}
 
-	
-	
-	
 	@PostMapping("/submit")
 	public String processCheckout(@RequestParam String cartItems, Model model, HttpSession session) {
 		Collection<CartItem> cartItemsList = parseCartItems(cartItems);
 		if (cartItemsList.isEmpty()) {
 			model.addAttribute("message", "Your cart is empty!");
-			return "redirect:/shopping-cart/view";
+			return SHOPPING_CART;
 		}
 		session.setAttribute("cartItems", cartItemsList);
 		return "redirect:/checkout";
 	}
-	
 
 	private Collection<CartItem> parseCartItems(String cartItemsJson) {
 		ObjectMapper objectMapper = new ObjectMapper();

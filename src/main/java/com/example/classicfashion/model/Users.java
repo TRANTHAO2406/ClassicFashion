@@ -24,8 +24,8 @@ public class Users {
 	private String email;
 
 	@NotBlank(message = "Mật khẩu không được để trống.")
-//	@Size(min = 8, message = "Mật khẩu phải có ít nhất 8 ký tự.")
-//	@Pattern(regexp = ".*[A-Z].*", message = "Mật khẩu phải có ít nhất 1 ký tự viết hoa.")
+	@Size(min = 8, message = "Mật khẩu phải có ít nhất 8 ký tự.")
+	@Pattern(regexp = ".*[A-Z].*", message = "Mật khẩu phải có ít nhất 1 ký tự viết hoa.")
 	@Column(nullable = false)
 	private String password;
 

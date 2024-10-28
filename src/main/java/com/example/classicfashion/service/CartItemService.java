@@ -57,16 +57,16 @@ public class CartItemService {
 	}
 
 	public void removeSelectedItems(Collection<CartItem> cartItems) {
-	    List<String> keysToRemove = new ArrayList<>();
-	    for (CartItem cartItem : cartItems) {
-	        if (cartItem.getIsSelected()) { 
-	            String key = createKey(cartItem.getProductID(), cartItem.getColor(), cartItem.getSize());
-	            keysToRemove.add(key); 
-	        }
-	    }
-	    for (String key : keysToRemove) {
-	        maps.remove(key);
-	    }
+		List<String> keysToRemove = new ArrayList<>();
+		for (CartItem cartItem : cartItems) {
+			if (cartItem.getIsSelected()) {
+				String key = createKey(cartItem.getProductID(), cartItem.getColor(), cartItem.getSize());
+				keysToRemove.add(key);
+			}
+		}
+		for (String key : keysToRemove) {
+			maps.remove(key);
+		}
 	}
 
 }
