@@ -113,7 +113,6 @@ public class CheckoutController {
 				if (newQuantity < 0) {
 					throw new RuntimeException("Số lượng sản phẩm trong kho không đủ: " + product.getProductName());
 				}
-				// Update the product quantity in the database
 				productDetail.setQuantity(newQuantity);
 				productDetailService.save(productDetail);
 				
@@ -148,7 +147,6 @@ public class CheckoutController {
 				transactionHistoryService.save(transactionHistory);
 
 				// Pass the order object to the model so it can be used in the Thymeleaf
-				// template
 				model.addAttribute("order", order);
 				model.addAttribute("totalPrice", totalPrice);
 

@@ -50,7 +50,7 @@
 <div th:replace="~{/fragment/navigation :: navigation}"></div>
 
     <div class="container mt-5">
-        <h2 class="text-center">Lịch sử mua hàng </span></h2>
+        <h2 class="text-center">Lịch sử mua hàng</h2>
 
         <div th:if="${oders != null}">
             <div class="table-responsive mt-4">
@@ -75,27 +75,7 @@
                             <td th:text="${order.status}"></td>
                             <td th:text="${order.updatedDate}"></td>
                             <td>
-                                <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="collapse" 
-                                th:attr="data-bs-target='#transactionCollapse' + ${iterStat.index}"> Xem giao dịch
-                                </button>
-                                <div th:attr="id='transactionCollapse' + ${iterStat.index}" class="collapse mt-2">
-                                    <table class="table table-bordered">
-                                        <thead class="table-light">
-                                            <tr>
-                                                <th>Ngày giao dịch</th>
-                                                <th>Số tiền</th>
-                                                <th>Trạng thái giao dịch</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr th:each="transaction : ${order.transactionHistories}">
-                                                <td th:text="${transaction.transactionDate}"></td>
-                                                <td th:text="${transaction.transactionAmount}"></td>
-                                                <td th:text="${transaction.status}"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                             <a class="btn btn-primary btn-sm" type="button" th:href="@{'/orderDetails/' + ${order.id}}"> Xem chi tiết</a>
                             </td>
                         </tr>
                     </tbody>

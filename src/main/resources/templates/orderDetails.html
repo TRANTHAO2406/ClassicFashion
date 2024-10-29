@@ -85,16 +85,15 @@
 					<tbody>
 						<tr th:each="detail : ${orderDetails}">
 							<td>
-							<!--  <img
-								th:src="@{'/images/' + ${detail.product.images[0].imgLink}}"
-								th:alt="${detail.product.productName}" width="100">  -->
+							 <img th:src="${#lists.isEmpty(detail.productDetail.images) ? '' : detail.productDetail.images[0].imgLink}"
+    								th:alt="${detail.productDetail.productId.productName}" width="100">
 							</td>
 							<td>
-								<p class="productName" th:text="${detail.product.productName}"></p>
-								<p class="size">Kích cỡ: <span th:text="${detail.productDetails.size}"></span></p>
-								<p class="color">Màu sắc: <span th:text="${detail.productDetails.color}"></span></p>
+								<p class="productName" th:text="${detail.productDetail.productId.productName}"></p>
+								<p class="size">Kích cỡ: <span th:text="${detail.productDetail.sizeId.sizeName}"></span></p>
+								<p class="color">Màu sắc: <span th:text="${detail.productDetail.colorId.colorName}"></span></p>
 							</td>
-							<td th:text="${detail.subTotal / detail.quantity} + ' đ'"></td>
+							<td th:text="${detail.price} + ' đ'"></td>
 							<td th:text="${detail.quantity}"></td>
 							<td th:text="${detail.subTotal} + ' đ'"></td>
 						</tr>
@@ -105,7 +104,7 @@
 					        <td class="font-weight-bold" th:text="${order.shippingPrice} + ' đ'"></td>
 					    </tr>
 						<tr>
-							<td colspan="4" class="text-right font-weight-bold">Tổng tiền:</td>
+							<td colspan="4" class="text-right font-weight-bold"><h5>Tổng tiền:</h5></td>
 							<td class="font-weight-bold" th:text="${order.totalPrice} + ' đ'"></td>
 						</tr>
 					</tfoot>
